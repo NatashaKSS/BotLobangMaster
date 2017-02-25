@@ -14,6 +14,10 @@ module.exports = class BotHub {
     // Set up SecurityHandler
     let SecurityHandler = require('./verification.js');
     this._securityHandler = new SecurityHandler(this._app);
+
+    // Set up ParseHub
+    let ParseHub = require('./ParseHub.js');
+    this._parsehub = new ParseHub();
   }
 
   run() {
@@ -27,6 +31,12 @@ module.exports = class BotHub {
 
     // Check if all config keys exist since we need every single one of them
     this._securityHandler.allConfigsExist();
+
+    // ======================================
+    // ALL MAIN FUNCTIONS OF BotLobangMaster
+    // ======================================
+    // Retrieve all job results from ParseHub
+    this._parsehub.getRunInfo();
 
     // Set up Express server middleware stack
     this.setupMiddleware();

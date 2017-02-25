@@ -17,7 +17,10 @@ module.exports = function SecurityHandler(app) {
   // The names of each API key stored in the process env
   this._CONFIG_KEY_NAMES = {
     AIRTABLE_API_KEY: "AIRTABLE_API_KEY",
-    AIRTABLE_BASE_ID_KEY: "AIRTABLE_BASE_ID"
+    AIRTABLE_BASE_ID_KEY: "AIRTABLE_BASE_ID",
+    PARSEHUB_PROJECT_TOKEN_KEY: "PARSEHUB_PROJECT_TOKEN",
+    PARSEHUB_API_KEY: "PARSEHUB_API_KEY",
+    PARSEHUB_LAST_RUN_TOKEN_KEY: "PARSEHUB_LAST_RUN_TOKEN"
   }
 
   /**
