@@ -1,0 +1,36 @@
+{
+  "name": "taxibot",
+  "version": "1.0.0",
+  "description": "TaxiBot made using NodeJS backend (botkit framework) with integrations with API.ai and AirTable.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NatashaKSS/taxibot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NatashaKSS/taxibot/issues"
+  },
+  "homepage": "https://github.com/NatashaKSS/taxibot#readme",
+  "dependencies": {
+    "apiai": "^3.0.3",
+    "async": "^2.1.4",
+    "body-parser": "^1.15.1",
+    "browser-logger": "^1.0.0",
+    "dashbot": "^0.8.4",
+    "dotenv": "^4.0.0",
+    "express": "^4.14.1",
+    "request": "^2.72.0",
+    "underscore": "^1.8.3",
+    "uuid": "^3.0.1",
+    "valid-url": "^1.0.9",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {},
+  "keywords": []
+}
