@@ -22,10 +22,6 @@ module.exports = class BotHub {
     // Set up the Translator
     let Translator = require('./Translator.js');
     this._translator = new Translator();
-
-    // Set up the AirTableHandler
-    let AirTableHandler = require('./AirTableHandler.js');
-    this._airtableHandler = new AirTableHandler();
   }
 
   run() {
