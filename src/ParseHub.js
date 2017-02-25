@@ -60,8 +60,9 @@ module.exports = class ParseHub {
       console.log("=====================================");
       console.log("Run Project...");
       if(!err) {
-        console.log("RUN OBJECT: " + JSON.stringify(JSON.parse(body)));
-        console.log("RUN TOKEN: " + JSON.parse(body).run_token);
+        let runObj = JSON.parse(body);
+        console.log("RUN OBJECT: " + JSON.stringify(runObj));
+        console.log("RUN TOKEN: " + runObj.run_token);
         console.log("=====================================");
       } else {
         console.log(err);
@@ -74,7 +75,7 @@ module.exports = class ParseHub {
    *
    * @returns    The data in csv/json, depending on the format parameter.
    */
-  retrieveLastReadyData() {
+  retrieveLastReadyData(callback) {
     request({
       method: "GET",
       gzip: true,
@@ -90,9 +91,11 @@ module.exports = class ParseHub {
       console.log("=====================================");
       if (!err) {
         // A very large JSON object returned from ParseHub
-        return JSON.parse(body);
+        // console.log(JSON.parse(body));
+        callback(JSON.parse(body));
       } else {
         console.log(err);
+        return err;
       }
     });
   }
@@ -103,10 +106,10 @@ module.exports = class ParseHub {
    *
    * @returns    The run identified by {RUN_TOKEN}.
    */
-  cancelRunProject() {
+  cancelRunProject(parsehubLastRunToken) {
     request({
       uri: "https://www.parsehub.com/api/v2/runs/" +
-            process.env.PARSEHUB_LAST_RUN_TOKEN + "/cancel",
+            parsehubLastRunToken + "/cancel",
       method: 'POST',
       form: {
         api_key: "tyA1jbOJwjWT"

@@ -18,6 +18,14 @@ module.exports = class BotHub {
     // Set up ParseHub
     let ParseHub = require('./ParseHub.js');
     this._parsehub = new ParseHub();
+
+    // Set up the Translator
+    let Translator = require('./Translator.js');
+    this._translator = new Translator();
+
+    // Set up the AirTableHandler
+    let AirTableHandler = require('./AirTableHandler.js');
+    this._airtableHandler = new AirTableHandler();
   }
 
   run() {
@@ -36,7 +44,10 @@ module.exports = class BotHub {
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
     // Retrieve all job results from ParseHub
-    this._parsehub.getRunInfo();
+    this._parsehub.retrieveLastReadyData((lastReadyData) => {
+      this._translator.translate(lastReadyData);
+    });
+
 
     // Set up Express server middleware stack
     this.setupMiddleware();
