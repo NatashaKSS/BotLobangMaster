@@ -42,8 +42,8 @@ module.exports = class BotHub {
     // Retrieve all job results from ParseHub
     this._parsehub.retrieveLastReadyData((lastReadyData) => {
       this._translator.translate(lastReadyData);
+      console.log("PLEASE CHECK AIRTABLE FOR TRANSLATION RESULTS!");
     });
-
 
     // Set up Express server middleware stack
     this.setupMiddleware();
