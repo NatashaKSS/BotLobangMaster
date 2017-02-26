@@ -40,31 +40,44 @@ module.exports = class Translator {
   }
 
   sendToAirTable(promos, table) {
-    for(var i = 0; i < promos.length; i++) {
-      let promo = promos[i];
+    let allAirTablePromos = promos;
 
-      if (!this.isExpired(promo)) {
-        this._base(table).create({
-          ID: Util.hashCode(promo.post_title),
-          Title: promo.post_title,
-          Title_URL: promo.post_title_url,
-          Description: promo.post_description,
-          Image: promo.img,
-          Image_URL: promo.img_url,
-          Status: promo.status,
-          "Start Date & Time": Chrono.parseDate(promo.post_date),
-          "End Date & Time": this.parseValidTillDate(promo.valid_till)
-        }, (err, record) => {
-          if (!err) {
-            // console.log(record.getId());
-          } else {
-            // Return debug message with first 30 chars of post title
-            console.log("In " + table + " table, " +
-              promo.post_title.slice(0, 30) + "... " + err);
-          }
-        });
+    this.getUniquePromos(promos, table, (allPromos) => {
+      allAirTablePromos = allPromos;
+
+      // allAirTablePromos should not contain duplicates at this point
+      for(var i = 0; i < allAirTablePromos.length; i++) {
+        let promo = allAirTablePromos[i];
+
+        if (!this.isExpired(promo)) {
+          this._base(table).create({
+            ID: Util.hashCode(promo.post_title),
+            Title: promo.post_title,
+            Title_URL: promo.post_title_url,
+            Description: promo.post_description,
+            Image: promo.img,
+            Image_URL: promo.img_url,
+            Status: promo.status,
+            "Promo Code(s)": JSON.stringify(promo.promo_codes),
+            "Start Date & Time": Chrono.parseDate(promo.post_date),
+            "End Date & Time": this.parseValidTillDate(promo.valid_till)
+          }, (err, record) => {
+            if (!err) {
+              console.log("No errors found in this record creation.");
+            } else {
+              // Return debug message with first 30 chars of post title
+              let postTitleSnippet = promo.post_title.slice(0, 30);
+              if (postTitleSnippet) {
+                console.log("In " + table + " table, " + promo.post_title.slice(0, 30) + "... " + err);
+              } else {
+                console.log("In " + table + " table, " + promo.post_title + "... " + err);
+              }
+            }
+          });
+        }
       }
-    }
+      console.log("DONE WITH SENDING TO AIRTABLE. PLEASE CHECK AIRTABLE.");
+    });
   }
 
   isExpired(promo) {
@@ -77,10 +90,61 @@ module.exports = class Translator {
     }
   }
 
-  hasDuplicateOnAirTable(post_title_checksum) {
+  getUniquePromos(promos, table, callback) {
+    let allPromos = promos;
+    let postTitles = this.getAllPromoTitles(allPromos);
+    let postTitlesID = this.getAllPromoTitleIDs(postTitles);
 
+    this._base(table).select({
+      view: "Main View"
+    }).eachPage(function page(records, fetchNextPage) {
+      // This function (`page`) will get called for each page of records.
+      records.forEach(function(record) {
+        // Skip a promo that's already in AirTable
+        allPromos = this.removeDuplicatePromo(allPromos, record.get('ID'));
+      }.bind(this));
+
+      // To fetch the next page of records, call `fetchNextPage`.
+      // If there are more records, `page` will get called again.
+      // If there are no more records, `done` will get called.
+      fetchNextPage();
+
+    }.bind(this), function done(err) {
+      if (!err) {
+        console.log("All pages fetched! No more records to fetch!");
+        callback(allPromos);
+      } else {
+        console.error(err);
+      }
+    }.bind(this));
   }
 
+  removeDuplicatePromo(promos, airtablePromoID) {
+    return promos.filter(function(promo) {
+      let promoIDToCheck = Util.hashCode(promo.post_title);
+      return promoIDToCheck !== airtablePromoID;
+    });
+  }
+
+  getAllPromoTitles(promos) {
+    let promoTitles = [];
+    promos.forEach((promo) => {
+      promoTitles.push(promo.post_title);
+    });
+    return promoTitles;
+  }
+
+  getAllPromoTitleIDs(promoTitles) {
+    let promoTitleIDs = [];
+    promoTitles.forEach((promoTitle) => {
+      promoTitleIDs.push(Util.hashCode(promoTitle));
+    });
+    return promoTitleIDs;
+  }
+
+  /**
+   * Parsing Dates using some NLP
+   */
   parseValidTillDate(validTillDate) {
     if (validTillDate) {
       return Chrono.parseDate(this.removeDaysLeftInValidTill(validTillDate));
@@ -105,13 +169,6 @@ module.exports = class Translator {
     } else {
       return validTillDate;
     }
-  }
-
-  /**
-   * Takes dates in natural sentences and returns a JSON Date object
-   */
-  parseDate() {
-
   }
 
 }
