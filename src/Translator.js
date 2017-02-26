@@ -35,8 +35,10 @@ module.exports = class Translator {
     let airfare = result.airfare_page;
     let entertainment = result.entertainment_page;
 
-    //this.sendToAirTable(dining_takeaways.concat(groceries), "F&B");
-    this.sendToAirTable(fashion_apparel.concat(electronics).concat(health_beauty), "F&B");
+    this.sendToAirTable(taxi_promos, "Taxi");
+    this.sendToAirTable(dining_takeaways.concat(groceries), "F&B");
+    this.sendToAirTable(fashion_apparel.concat(electronics).concat(health_beauty), "Shopping");
+    this.sendToAirTable(hotel.concat(airfare).concat(entertainment), "Travel");
   }
 
   sendToAirTable(promos, table) {
@@ -63,7 +65,7 @@ module.exports = class Translator {
             "End Date & Time": this.parseValidTillDate(promo.valid_till)
           }, (err, record) => {
             if (!err) {
-              console.log("No errors found in this record creation.");
+              // No errors
             } else {
               // Return debug message with first 30 chars of post title
               let postTitleSnippet = promo.post_title.slice(0, 30);
