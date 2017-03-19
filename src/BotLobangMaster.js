@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const SecurityHandler = require('./SecurityHandler.js');
+const ParseHub = require('./web_crawling/ParseHub.js');
+const Translator = require('./web_crawling/Translator.js');
 
 /**
  * This class defines BotHub - The IQ of TaxiBot.
@@ -12,15 +15,12 @@ module.exports = class BotHub {
     this._app = express();
 
     // Set up SecurityHandler
-    let SecurityHandler = require('./verification.js');
     this._securityHandler = new SecurityHandler(this._app);
 
     // Set up ParseHub
-    let ParseHub = require('./ParseHub.js');
     this._parsehub = new ParseHub();
 
     // Set up the Translator
-    let Translator = require('./Translator.js');
     this._translator = new Translator();
   }
 
@@ -33,20 +33,20 @@ module.exports = class BotHub {
     	res.send('Hello World! I am BotLobangMaster!');
     })
 
-    // Check if all config keys exist since we need every single one of them
+    // Check if all config keys exist
     this._securityHandler.allConfigsExist();
+
+    // Set up Express server middleware stack
+    this.setupMiddleware();
 
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
     // Retrieve all job results from ParseHub
-    this._parsehub.retrieveLastReadyData((lastReadyData) => {
-      this._translator.translate(lastReadyData);
-      console.log("PLEASE CHECK AIRTABLE FOR TRANSLATION RESULTS!");
-    });
-
-    // Set up Express server middleware stack
-    this.setupMiddleware();
+    // this._parsehub.retrieveLastReadyData((lastReadyData) => {
+    //   this._translator.translate(lastReadyData);
+    //   console.log("PLEASE CHECK AIRTABLE FOR TRANSLATION RESULTS!");
+    // });
 
     // Spin up the server
     this._app.listen(this._app.get('port'), function () {
