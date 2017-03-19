@@ -4,6 +4,8 @@ const SecurityHandler = require('./SecurityHandler.js');
 const ParseHub = require('./web_crawling/ParseHub.js');
 const Translator = require('./web_crawling/Translator.js');
 
+const Brands = require('./references/brands.js');
+
 /**
  * This class defines BotHub - The IQ of TaxiBot.
  *
@@ -38,6 +40,9 @@ module.exports = class BotHub {
 
     // Set up Express server middleware stack
     this.setupMiddleware();
+
+    //console.log(JSON.stringify(Brands.brands));
+    console.log(JSON.stringify(Brands.brands['F_&_B']['category']['coffee']));
 
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
