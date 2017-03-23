@@ -1,5 +1,5 @@
-const ParseHub = require('./web_crawling/ParseHub.js');
-const Translator = require('./web_crawling/Translator.js');
+const ParseHub = require('./ParseHub.js');
+const Translator = require('./Translator.js');
 
 /**
  * This class defines the Web Crawler that parses and translates
