@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const request = require('request');
 
 /**
  * This class defines a handler for all security and verification requests,

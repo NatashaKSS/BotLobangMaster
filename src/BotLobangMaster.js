@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 
 // Import other internal dependencies
 const SecurityHandler = require('./SecurityHandler.js');
+const FBPostsRetriever = require('./retriever/FBPostsRetriever.js');
 
 // Import database
 const Brands = require('./references/brands.js');
@@ -20,9 +21,10 @@ module.exports = class BotHub {
 
     // Set up SecurityHandler
     this._securityHandler = new SecurityHandler(this._app);
-
-    // Check if all config keys exist
     this._securityHandler.allConfigsExist();
+
+    // Set up FBPostsRetriever
+    this._fbPostsRetriever = new FBPostsRetriever();
   }
 
   run() {
@@ -40,6 +42,15 @@ module.exports = class BotHub {
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
+    const options = {
+      timeout: 3000,
+      pool: { maxSockets: Infinity },
+      headers: { connection: "keep-alive" }
+    }
+
+    const queryURL = "/posts?fields=message,full_picture,link,attachments{url}";
+    this._fbPostsRetriever.getNode(options, queryURL);
+
 
     // Spin up the server
     this._app.listen(this._app.get('port'), function () {
