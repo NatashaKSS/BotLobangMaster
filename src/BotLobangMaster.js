@@ -19,6 +19,9 @@ module.exports = class BotHub {
     // Set up SecurityHandler
     this._securityHandler = new SecurityHandler(this._app);
 
+    // Check if all config keys exist
+    this._securityHandler.allConfigsExist();
+
     // Set up ParseHub
     this._parsehub = new ParseHub();
 
@@ -35,23 +38,12 @@ module.exports = class BotHub {
     	res.send('Hello World! I am BotLobangMaster!');
     })
 
-    // Check if all config keys exist
-    this._securityHandler.allConfigsExist();
-
     // Set up Express server middleware stack
     this.setupMiddleware();
-
-    //console.log(JSON.stringify(Brands.brands));
-    console.log(JSON.stringify(Brands.brands['F_&_B']['category']['coffee']));
 
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
-    // Retrieve all job results from ParseHub
-    // this._parsehub.retrieveLastReadyData((lastReadyData) => {
-    //   this._translator.translate(lastReadyData);
-    //   console.log("PLEASE CHECK AIRTABLE FOR TRANSLATION RESULTS!");
-    // });
 
     // Spin up the server
     this._app.listen(this._app.get('port'), function () {
