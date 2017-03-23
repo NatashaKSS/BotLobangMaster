@@ -1,9 +1,11 @@
+// Import libraries
 const express = require('express');
 const bodyParser = require('body-parser');
-const SecurityHandler = require('./SecurityHandler.js');
-const ParseHub = require('./web_crawling/ParseHub.js');
-const Translator = require('./web_crawling/Translator.js');
 
+// Import other internal dependencies
+const SecurityHandler = require('./SecurityHandler.js');
+
+// Import database
 const Brands = require('./references/brands.js');
 
 /**
@@ -21,12 +23,6 @@ module.exports = class BotHub {
 
     // Check if all config keys exist
     this._securityHandler.allConfigsExist();
-
-    // Set up ParseHub
-    this._parsehub = new ParseHub();
-
-    // Set up the Translator
-    this._translator = new Translator();
   }
 
   run() {
