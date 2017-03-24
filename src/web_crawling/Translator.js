@@ -1,6 +1,6 @@
 const AirTable = require('airtable');
 const Chrono = require('chrono-node');
-const Util = require('../util.js');
+const Util = require('../lib/util.js');
 
 /**
  * This translator takes ParseHub results and parses, interprets
