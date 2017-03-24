@@ -49,10 +49,14 @@ module.exports = class BotHub {
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
-    this._FBPostsRetriever.getNode(
-      constants.FB_QUERY_OPTIONS, constants.FB_QUERY_PARAMS_URL);
-
-
+    const FBPostsRetriever = this._FBPostsRetriever;
+    FBPostsRetriever.getNode(
+      constants.FB_QUERY_OPTIONS,
+      "PizzaHutSingapore",
+      constants.FB_QUERY_PARAMS_URL, function(result) {
+        FBPostsRetriever.printPostFieldsToConsole(result);
+      }
+    );
 
 
     // ======================================
