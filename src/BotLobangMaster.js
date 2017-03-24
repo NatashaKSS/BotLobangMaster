@@ -5,9 +5,13 @@ const bodyParser = require('body-parser');
 // Import other internal dependencies
 const SecurityHandler = require('./SecurityHandler.js');
 const FBPostsRetriever = require('./retriever/FBPostsRetriever.js');
+const PromoMachine = require('./PromoMachine/PromoMachine.js');
 
 // Import database
 const Brands = require('./references/brands.js');
+
+// Import constants
+const constants = require('./lib/constants.js');
 
 /**
  * This class defines BotHub - The IQ of TaxiBot.
@@ -20,11 +24,14 @@ module.exports = class BotHub {
     this._app = express();
 
     // Set up SecurityHandler
-    this._securityHandler = new SecurityHandler(this._app);
-    this._securityHandler.allConfigsExist();
+    this._SecurityHandler = new SecurityHandler(this._app);
+    this._SecurityHandler.allConfigsExist();
 
     // Set up FBPostsRetriever
-    this._fbPostsRetriever = new FBPostsRetriever();
+    this._FBPostsRetriever = new FBPostsRetriever();
+
+    // Set up PromoMachine
+    this._PromoMachine = new PromoMachine();
   }
 
   run() {
@@ -42,19 +49,17 @@ module.exports = class BotHub {
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
-    const options = {
-      timeout: 3000,
-      pool: { maxSockets: Infinity },
-      headers: { connection: "keep-alive" }
-    }
-
-    const queryURL = "/posts?fields=message,full_picture,link,attachments{url}";
-    this._fbPostsRetriever.getNode(options, queryURL);
+    this._FBPostsRetriever.getNode(
+      constants.FB_QUERY_OPTIONS, constants.FB_QUERY_PARAMS_URL);
 
 
-    // Spin up the server
+
+
+    // ======================================
+    // SPIN UP THE SERVER
+    // ======================================
     this._app.listen(this._app.get('port'), function () {
-      console.log('RUNNING ON PORT', app.get('port'));
+      console.log('\nRUNNING ON PORT\n', app.get('port'));
     })
   }
 
