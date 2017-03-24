@@ -26,12 +26,12 @@ module.exports = class FBPostsRetriever {
     var result = 0;
 
     this._FBGraph.setOptions(options).
-      get("PizzaHutSingapore" + queryParams, function(err, res) {
+      get(queryURL + queryParams, function(err, res) {
         if (err) {
           console.log("ERROR: ", err);
           result = 0;
         } else if (!res) {
-          console.log("NO RESPONSE RECEIVED");
+          console.log("NO RESPONSE RECEIVED.");
           result = 0;
         } else {
           result = res.data[0];
