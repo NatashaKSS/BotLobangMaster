@@ -11,6 +11,7 @@
  * "https://graph.facebook.com/v2.8/StarbucksSingapore/posts" will return you
  * a list of JSON objects representing a post on FB's Graph API.
  */
+
 module.exports = {
 	brands: {
 		"F_&_B": {
