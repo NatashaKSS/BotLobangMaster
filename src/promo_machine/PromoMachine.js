@@ -7,7 +7,7 @@ module.exports = class PromoMachine {
     let normalizer = new Normalizer();
     normalizer.attachStemmer(); // applies stemmer to all Strings
 
-    console.log("awesome! man i am. i didn't do it sia!!".tokenizeAndStem(false));
+    // console.log("awesome! man i am. i didn't do it sia!!".tokenizeAndStem(false));
   }
 
   /**
