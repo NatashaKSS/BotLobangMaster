@@ -1,6 +1,8 @@
 /**
  * Bayes Classifier
  * based on npm library Natural's use of the WordNet corpus
+ *
+ * Classifies text as 'promo' or 'not-promo'
  */
 module.exports = class BayesClassifier {
   constructor() {
@@ -15,16 +17,40 @@ module.exports = class BayesClassifier {
    *                    Array of {tokens : label} classifications.
    *                    The post must already be normalized.
    *                    E.g. [{ tokens: ['cool', 'promo'] , label: 'promo' },
-   *                          { tokens: ['study', 'hard' ] , label: 'notPromo' }]
+   *                          { tokens: ['study', 'hard' ] , label: 'not-promo' }]
    */
   setTraining(postLabelClassifications) {
-    for (classification in postLabelClassifications) {
-      this._bayesClassifier.addDocument(classification.tokens, classification.label);
+    for (let i = 0; i < postLabelClassifications.length; i++) {
+      this._bayesClassifier.addDocument(
+        postLabelClassifications[i].tokens, postLabelClassifications[i].label);
     }
   }
 
   /**
-   * Classifies a post's message and labels it as 'promo' or 'notPromo'.
+   * Trains this classifier
+   *
+   * Precondition:
+   * Classifier must already by trained.
+   */
+  train() {
+    this._bayesClassifier.train();
+  }
+
+  /**
+   * Classifies a piece of text and outputs its label as 'promo' or 'not-promo'.
+   *
+   * Precondition:
+   * Classifier must already be trained.
+   *
+   * @param {String} text Text to be classified
+   * @return {String} Label classification of this text
+   */
+  classifyAndGetLabel(text) {
+    return this._bayesClassifier.classify(text);
+  }
+
+  /**
+   * Classifies a post's message and labels it as 'promo' or 'not-promo'.
    *
    * Precondition:
    * Classifier must already be trained.
@@ -38,7 +64,7 @@ module.exports = class BayesClassifier {
   }
 
   /**
-   * Classifies a list of post's message and labels each of them as 'promo' or 'notPromo'.
+   * Classifies a list of post's message and labels each of them as 'promo' or 'not-promo'.
    *
    * Precondition:
    * Classifier must already be trained.
@@ -46,7 +72,7 @@ module.exports = class BayesClassifier {
    * @param {String} postMsgs Array of post messages to classify whether they are promos or not
    * @return {Object} List of classifications of each postMsg.
    *                  E.g. [{label: '<postMsg1>', value: 'promo'},
-   *                        {label: '<postMsg2>', value: 'notPromo'}]
+   *                        {label: '<postMsg2>', value: 'not-promo'}]
    */
   classifyListOfPostMsgs(postMsgs) {
     let classifications = [];
