@@ -52,58 +52,7 @@ module.exports = class BotHub {
     // ======================================
     const FBPostsRetriever = this._FBPostsRetriever;
 
-    // Get list of brands to query posts from
-    let FnBCategories = Brands['brands']['F_&_B']['category'];
-    let listOfFastFoodBrands = Object.keys(FnBCategories['fast_food']);
-    let listOfBubbleTeaBrands = Object.keys(FnBCategories['bubble_tea']);
-
-    // GET LIST OF TEXT MSGS
-    let ClassLabels = require('./references/classification_labels.js');
-    let FnBCategories_ClassLabels = ClassLabels['classifications']['F_&_B']['category'];
-    let FastFood_ClassLabels = FnBCategories_ClassLabels['fast_food'];
-    let FastFoodBrands = Object.keys(FastFood_ClassLabels);
-    // console.log(FastFood_ClassLabels['kfc']);
-    // console.log(FastFoodBrands);
-
-    // NORMALIZATION
-    let Normalizer = require('./NLP/Normalizer.js');
-    let normalizerInstance = new Normalizer().attachStemmer();
-    let tokenizedTrainData = [];
-
-    for (let i = 0; i < FastFoodBrands.length; i++) {
-      for (let j = 0; j < FastFood_ClassLabels[FastFoodBrands[i]].length; j++) {
-        let entry = FastFood_ClassLabels[FastFoodBrands[i]][j];
-        let msg = entry['text'];
-        let label = entry['label'];
-
-        let tokenizedMsg = msg.tokenizeAndStem();
-
-        tokenizedTrainData.push({
-          tokens: tokenizedMsg,
-          label: label
-        })
-      }
-    }
-
-    // CLASSIFICATION
-    let BayesClassifier = require('./NLP/BayesClassifier.js');
-    let bayes = new BayesClassifier();
-
-    bayes.setTraining(tokenizedTrainData);
-    bayes.train();
-
-    let trial = "The essence of winter captured in a cup. Is there a better way to celebrate this Holiday season than by sipping on a warm and frothy cup of a traditional tea? Yes, we didn’t think so either. Go and grab a cup of our Winter Dream Tea Latte today! #CoffeeBeanSG";
-    console.log(trial.tokenizeAndStem());
-    console.log(bayes.classifyAndGetLabel(trial.tokenizeAndStem()));
-    console.log(bayes.classifyPostMsg(trial));
-
-    // DO ACCURACY REPORT
-    // For those that you got wrong, print sections:
-    // 1. Classified as promos but were actually not-promos
-    // 2. Classified as not-promos but were actually promos
-    // Print original text and normalized text
-
-    // END CLASSIFICATION REPORT
+    this._PromoMachine.generatePromo([]);
 
     FBPostsRetriever.getListOfNodes(
       constants.FB_QUERY_OPTIONS,
@@ -124,8 +73,6 @@ module.exports = class BotHub {
       console.log('\nRUNNING ON PORT\n', app.get('port'));
     })
   }
-
-
 
   // ===================================================
   // SERVER CONFIG SETUPS
