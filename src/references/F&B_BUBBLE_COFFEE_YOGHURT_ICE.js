@@ -317,7 +317,7 @@ module.exports = {
             }, {
               "text": "Cold Brew Youthberry Tea Full Recipe: bit.ly/ColdBrewYouthbe" +
                   "rry",
-              "label": "not-cpromo"
+              "label": "not-promo"
             }
           ],
           "coffee_bean_and_tea_leaf": [
