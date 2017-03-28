@@ -76,8 +76,8 @@ module.exports = class BayesClassifier {
    */
   classifyListOfPostMsgs(postMsgs) {
     let classifications = [];
-    for (postMsg in postMsgs) {
-      classifications.push(this.classifyPostMsg(postMsg));
+    for (let i = 0; i < postMsgs.length; i++) {
+      classifications.push(this.classifyPostMsg(postMsgs[i]));
     }
     return classifications;
   }
