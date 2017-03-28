@@ -1,0 +1,113 @@
+/**
+* Trained with Bubble tea, Fast Food, Yoghurt, Ice Cream, Taxi
+**
+
+==============GOT THIS WRONG=============
+Original Text: "Sip some coffee, make some art. A blank tumbler is here, all ready for your creative touch. Purchase this 16oz Create-Your-Own tumbler at $19.90 using your Starbucks Card and receive a limited edition Siren Starbucks Card (with $0 value). Valid while stocks last, not available for sale separately"
+Normalized Tokens: ["sip","coffe","art","blank","tumbler","readi","creativ","touch","purchas","16oz","creat","tumbler","19","90","us","starbuck","card","receiv","limit","edit","siren","starbuck","card","valu","valid","stock","last","not","avail","sale","separ"]
+Was supposed to be not-promo, but instead got promo
+{"promo":6.497327904714797e-26,"not-promo":4.0347718084714335e-28}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Cheers to a delightful union of our signature Green Tea Frappuccino and freeze-dried strawberry bits that sit between two fluffy layers of strawberry whipped cream. The drink is then topped off with green tea powder and more freeze-dried strawberry goodness. #GreenTeaStrawberryBlossom #AvailableNow"
+Normalized Tokens: ["cheer","delight","union","signatur","green","tea","frappuccino","freez","dri","strawberri","bit","sit","two","fluffi","layer","strawberri","whip","cream","drink","top","off","green","tea","powder","freez","dri","strawberri","good","greenteastrawberryblossom","availablenow"]
+Was supposed to be not-promo, but instead got promo
+{"promo":2.0306623002018452e-18,"not-promo":4.361854679181694e-19}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "??Balloons, ??Tumblers, ??Green Tea Strawberry Blossom Frappuccino. Starbucks Rewards members, from 15 Mar, purchase this tumbler (16oz) at $24.90 with your Starbucks Card to enjoy a new Tall-sized Green Tea Strawberry Blossom Frappuccino on us. Tumbler also comes with an additional complimentary drink voucher. T&Cs apply."
+Normalized Tokens: ["balloon","tumbler","green","tea","strawberri","blossom","frappuccino","starbuck","reward","member","15","mar","purchas","tumbler","16oz","24","90","starbuck","card","enjoi","new","tall","size","green","tea","strawberri","blossom","frappuccino","us","tumbler","come","addit","complimentari","drink","voucher","cs","appli"]
+Was supposed to be not-promo, but instead got promo
+{"promo":7.723289977037407e-21,"not-promo":1.4503074436546097e-25}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "No peeking until Christmas day. Each Starbucks Cheer Bag comes with one Create-Your-Own tumbler and another mystery tumbler. Yours for $24.90. Available from 19 Dec. #GiftOfTheWeek bit.ly/StarbucksGiftFinder"
+Normalized Tokens: ["no","peek","christma","dai","starbuck","cheer","bag","come","on","creat","tumbler","mysteri","tumbler","24","90","avail","19","dec","giftoftheweek","bit","ly","starbucksgiftfind"]
+Was supposed to be not-promo, but instead got promo
+{"promo":6.435975457700215e-19,"not-promo":3.2369979066283527e-21}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "A touch of holiday sparkle, ready to dazzle all year round. These Starbucks Swarovski mugs are yours for $49.90 (red) or $69.90 (white). From 5-11 Dec, pay with your Starbucks Card to enjoy 20% off these exclusive mugs. #GiftOfTheWeek bit.ly/StarbucksGiftFinder"
+Normalized Tokens: ["touch","holidai","sparkl","readi","dazzl","year","round","starbuck","swarovski","mug","49","90","red","69","90","white","11","dec","pai","starbuck","card","enjoi","20","off","exclus","mug","giftoftheweek","bit","ly","starbucksgiftfind"]
+Was supposed to be not-promo, but instead got promo
+{"promo":1.56651470973521e-22,"not-promo":8.59441448091624e-27}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Santa's little helpers left behind a trail of magical stardust. From 14-20 Nov, these festive Cold Cups are yours for $15.90 each. #GiftOfTheWeek bit.ly/StarbucksGiftFinder"
+Normalized Tokens: ["santa","littl","helper","left","behind","trail","magic","stardust","14","20","nov","festiv","cold","cup","15","90","giftoftheweek","bit","ly","starbucksgiftfind"]
+Was supposed to be not-promo, but instead got promo
+{"promo":7.199620882533895e-18,"not-promo":5.538863084675133e-20}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "A whimsical trio that keeps the holiday spirit alive all year round. Each Snow Mates set comes with one mini Starbucks Card (choose between polar bear and squirrel). Yours for $49.90. Available from 7 Nov. #GiftOfTheWeek http://bit.ly/StarbucksGiftFinder"
+Normalized Tokens: ["whimsic","trio","keep","holidai","spirit","aliv","year","round","snow","mate","set","come","on","mini","starbuck","card","choos","polar","bear","squirrel","49","90","avail","nov","giftoftheweek","http","bit","ly","starbucksgiftfind"]
+Was supposed to be not-promo, but instead got promo
+{"promo":4.8655974460213215e-18,"not-promo":3.23699790662834e-20}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "A splash of gold, a dash of glitter and a whole lotta festive cheer. Our newest stainless steel Cold Cups and Water Bottles are all ready for the holiday season. Each item comes with two treat vouchers. Available while stocks last, T&Cs apply."
+Normalized Tokens: ["splash","gold","dash","glitter","whole","lotta","festiv","cheer","newest","stainless","steel","cold","cup","water","bottl","readi","holidai","season","item","come","two","treat","voucher","avail","stock","last","cs","appli"]
+Was supposed to be not-promo, but instead got promo
+{"promo":1.995333269125844e-24,"not-promo":2.3573251147656243e-26}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: " #CoffeeTip: Love a strong dose of caffeine in the morning? Go for a medium roast! Contrary to popular belief, roasting only brings out the flavour of the beans, but does not make them more potent. In fact, the longer the beans are roasted, the less caffeine they retain. With walnutty notes and a soft fruity aftertaste, our Brazil Single Origin Coffee is the perfect medium roast to start your day with. Order it today: https://www.coffeebean.com.sg/…/coffee…/brazil-single-origin #
+>  CoffeeBeanSG"
+Normalized Tokens: ["coffeetip","love","strong","dose","caffein","morn","go","medium","roast","contrari","popular","belief","roast","bring","flavour","bean","not","potent","fact","longer","bean","roast","less","caffein","retain","walnutti","note","soft","fruiti","aftertast","brazil","singl","origin","coffe","perfect","medium","roast","start","dai","order","todai","http","www","coffeebean","com","sg","coffe","brazil","singl","origin","coffeebeansg"]
+Was supposed to be not-promo, but instead got promo
+{"promo":2.2864779038793207e-29,"not-promo":7.393246402293072e-30}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "TGIF! Do you love wrapping up a busy week with a good friend? We do too. If you’re a friend of ours on Facebook, now’s your last chance to enjoy a cool 1+1 offer on our Passion Fruit Sparkling Tea. Drop in at any #CoffeeBeanSG outlet to take advantage of the offer — and don’t forget to get your friend along! *T&C:- Offer valid from 8th Feb to 10th Feb Offer applicable for those who show that they are our fans on Facebook"
+Normalized Tokens: ["tgif","love","wrap","busi","week","good","friend","re","friend","facebook","last","chanc","enjoi","cool","offer","passion","fruit","sparkl","tea","drop","coffeebeansg","outlet","advantag","offer","don","forget","friend","along","offer","valid","8th","feb","10th","feb","offer","applic","show","fan","facebook"]
+Was supposed to be promo, but instead got not-promo
+{"promo":1.2396845565206842e-33,"not-promo":5.802631138431726e-33}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Christmas has come early, and quite literally too! Here's your first gift — our #20thAnniversary surprise. Get our scrumptious Gingerbread Man for just $2 with any beverage you purchase. Let the festivities begin. #CoffeeBeanSG"
+Normalized Tokens: ["christma","earli","quit","liter","first","gift","20thanniversari","surpris","scrumptiou","gingerbread","man","just","beverag","purchas","let","festiv","begin","coffeebeansg"]
+Was supposed to be promo, but instead got not-promo
+{"promo":3.1478323183959817e-11,"not-promo":1.0494754791773622e-10}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "What does #Christmas taste like? A whole lot of dark chocolate ganache cake, oozing with choco mousse, we'd say! Our Classic Log Cake is here again, and it's winning hearts as the #CakeOfTheWeek! What's more, you also get a $10 early bird discount on your log cake if you order it online before the 30th of November! Get it today: http://bit.ly/2gg40e1"
+Normalized Tokens: ["christma","tast","whole","lot","dark","chocol","ganach","cake","ooz","choco","mouss","sai","classic","log","cake","win","heart","cakeoftheweek","10","earli","bird","discount","log","cake","order","onlin","30th","novemb","todai","http","bit","ly","2gg40e1"]
+Was supposed to be promo, but instead got not-promo
+{"promo":3.2993687427817966e-28,"not-promo":7.082113949529807e-27}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Feeling hungry? Grab a bite at Costa Coffee and try our new Mediterranean Flatbread featuring a fresh medley of vegetables. (Important note: it tastes extra delicious with an Old Paradise Street No.19 roast Flat White!) "
+Normalized Tokens: ["feel","hungri","grab","bite","costa","coffe","try","new","mediterranean","flatbread","featur","fresh","medlei","veget","import","note","tast","extra","delici","old","paradis","street","no","19","roast","flat","white"]
+Was supposed to be not-promo, but instead got promo
+{"promo":2.7220641279569335e-26,"not-promo":2.0053633788804552e-26}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "In a rush this morning? We have just the thing for you. Grab a Salted Caramel Croissant and a Flat White for an extra delicious start to your day. "
+Normalized Tokens: ["rush","morn","just","thing","grab","salt","caramel","croissant","flat","white","extra","delici","start","dai"]
+Was supposed to be not-promo, but instead got promo
+{"promo":1.8350779247230598e-13,"not-promo":4.525751368751928e-15}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Have you tried our addictive new Green Tea croissant yet? Some say it goes really well with the Flat White. Try it and see if you agree. "
+Normalized Tokens: ["tri","addict","new","green","tea","croissant","yet","sai","goe","realli","flat","white","try","agre"]
+Was supposed to be not-promo, but instead got promo
+{"promo":1.6898932048686641e-12,"not-promo":2.8394899328391886e-13}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Wake up to the delicious taste of our Laksa Breakfast Set every morning! Come rain or shine, you can always kickstart your day with our Laksa in a cup, Kaya Toast with Butter, and Hot Coffee/Tea! Available at Ya Kun @ Ang Mo Kio, Compass One, Sun Plaza, and White Sands only, from 13 February to 16 April 2017, 8.30am – 11am daily. Terms and conditions apply."
+Normalized Tokens: ["wake","delici","tast","laksa","breakfast","set","everi","morn","rain","shine","alwai","kickstart","dai","laksa","cup","kaya","toast","butter","hot","coffe","tea","avail","ya","kun","ang","mo","kio","compass","on","sun","plaza","white","sand","13","februari","16","april","2017","30am","11am","daili","term","condit","appli"]
+Was supposed to be not-promo, but instead got promo
+{"promo":4.7460257244522985e-33,"not-promo":9.639482591897653e-39}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Good news everyone! Our outlet in Clementi Mall (#B1-21/23) is reopen after an extensive one month renovation! Show your support and visit our newest and slickest outlet today! "
+Normalized Tokens: ["good","new","everyon","outlet","clementi","mall","b1","21","23","reopen","extens","on","month","renov","show","support","visit","newest","slickest","outlet","todai"]
+Was supposed to be not-promo, but instead got promo
+{"promo":6.64047544015094e-23,"not-promo":2.522078676172012e-23}
+=========================================
+================SUMMARY================
+You got 41/58 correct
+Accuracy is 0.7068965517241379
+Misclassification rate is 0.29310344827586204
+Number of false positives is 14 out of 17 misclassified.
+=============END OF SUMMARY============

@@ -1,0 +1,21 @@
+/**
+* Trained with Coffee, Fast Food, Yoghurt, Ice Cream, Taxi
+**
+==============GOT THIS WRONG=============
+Original Text: "Don't wait for a job to fall on you! Come join us at our coming recruitment drive at Suntec Convention Centre @STJOBS CAREER&DEVELOPMENT 2017 from 25th-26th March 2017, 10am-6pm or contact us @ 64405845/singaporehr@koicafe.com"
+Normalized Tokens: ["don","wait","job","fall","join","us","come","recruit","drive","suntec","convent","centr","stjob","career","develop","2017","25th","26th","march","2017","10am","6pm","contact","us","64405845","singaporehr","koicaf","com"]
+Was supposed to be not-promo, but instead got promo
+{"promo":5.2841113120700384e-17,"not-promo":2.822683829539222e-18}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Join Us! To read more about the job description and responsibilities, please click on the following link: http://www.koithe.com/upload/recruiten/1606091824501.jpg Submit your application to kaiyin@koicafe.com, or call 64405845 for more enquiry."
+Normalized Tokens: ["join","us","read","job","descript","respons","pleas","click","follow","link","http","www","koith","com","upload","recruiten","1606091824501","jpg","submit","applic","kaiyin","koicaf","com","call","64405845","enquiri"]
+Was supposed to be not-promo, but instead got promo
+{"promo":4.2429116396221694e-14,"not-promo":3.424216082729781e-14}
+=========================================
+================SUMMARY================
+You got 14/16 correct
+Accuracy is 0.875
+Misclassification rate is 0.125
+Number of false positives is 2 out of 2 misclassified.
+=============END OF SUMMARY============
