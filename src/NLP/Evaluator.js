@@ -80,6 +80,52 @@ module.exports = class Evaluator {
   }
 
   /**
+   * Determines if the actual classification object is a true positive or not.
+   * If it isn't a true positive, it must then be a true negative beacuse
+   * the actual and expected classification object are classified correctly.
+   *
+   * @param {Object} actualClassification Actual classification of this data point
+   * @param {Object} expectedEntry Expected gold standard of this data point
+   */
+  isTruePositive(actualClassification, expectedEntry) {
+    if (this.isClassifiedCorrectly(actualClassification, expectedEntry) &&
+        actualClassification['labels'][0]['label'] === 'promo') {
+      // Classified correctly and is a 'promo'
+      return actualClassification;
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Determines if the actual classification object is a false positive or not.
+   * If it isn't a false positive, it must then be a false negative beacuse
+   * the actual and expected classification object are misclassified already.
+   *
+   * @param {Object} actualClassification Actual classification of this data point
+   * @param {Object} expectedEntry Expected gold standard of this data point
+   */
+  isFalsePositive(actualClassification, expectedEntry) {
+    if (!this.isClassifiedCorrectly(actualClassification, expectedEntry)) {
+      if (actualClassification['labels'][0]['label'] === 'promo') {
+        // The actual classification was positive, i.e. 'promo'
+        return true;
+      } else {
+        // The actual classification was negative, i.e. 'not-promo'
+        return false;
+      }
+    }
+  }
+
+  computeMisclassificationRate(total, numCorrect) {
+    return (total - numCorrect) / total;
+  }
+
+  getAccuracyInStr(total, numCorrect) {
+    return numCorrect + "/" + total;
+  }
+
+  /**
    * Computes and returns the probabilities of the respective
    * 'promo' and 'not-promo' labels
    *
@@ -101,33 +147,5 @@ module.exports = class Evaluator {
     }
 
     return labelProbabilities;
-  }
-
-  /**
-   * Determines if the actual classification object is a false positive or not.
-   * If it isn't a false positive, it must then be a false negative beacuse
-   * the actual and expected classification object are misclassified already.
-   *
-   * @param {Object} actualClassification Actual classification of this data point
-   * @param {Object} expectedEntry Expected gold standard of this data point 
-   */
-  isFalsePositive(actualClassification, expectedEntry) {
-    if (!this.isClassifiedCorrectly(actualClassification, expectedEntry)) {
-      if (actualClassification['labels'][0]['label'] === 'promo') {
-        // The actual classification was positive, i.e. 'promo'
-        return true;
-      } else {
-        // The actual classification was negative, i.e. 'not-promo'
-        return false;
-      }
-    }
-  }
-
-  computeMisclassificationRate(total, numCorrect) {
-    return (total - numCorrect) / total;
-  }
-
-  getAccuracyInStr(total, numCorrect) {
-    return numCorrect + "/" + total;
   }
 }

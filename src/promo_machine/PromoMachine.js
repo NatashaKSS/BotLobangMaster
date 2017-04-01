@@ -16,9 +16,20 @@ module.exports = class PromoMachine {
    * @return {[Array]} Promos fit for FB chatbot
    */
   generatePromos(posts) {
-    let classified = this._promoDecisionMaker.trainClassifier(false);
+    let promoObjs = this._promoDecisionMaker.getPromosOnly(false, []);
 
+    this.printListOfPromoMsg(promoObjs);
 
     return [{}, {}, {}];
+  }
+
+  //==============================================================
+  // PRINT DIAGNOSTICS
+  //==============================================================
+  printListOfPromoMsg(listOfObjs) {
+    for (let i = 0; i < listOfObjs.length; i++) {
+      console.log(listOfObjs[i]['originalMsg']);
+      console.log("=================================");
+    }
   }
 }

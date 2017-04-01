@@ -22,10 +22,38 @@ module.exports = class PromoDecisionMaker {
 
     this._bayes = new BayesClassifier();
     this._evaluator = new Evaluator();
+
+    this._trainAndTestObj = null;
   }
 
-  getPromosOnly() {
-    
+  //==============================================================
+  // GETTING PROMOS
+  //==============================================================
+  /**
+   * Classify FB posts and get a list of promo objects the Promo
+   * Decision-Maker thinks are promos.
+   * @param {Boolean} printAccReport True if diagnostic report is to be printed
+   * @param {[Array]} unclassifiedPosts TODO: MUST BE IN THE TEST OBJ'S SCHEMA
+   * @returns {[Array]} [{
+   *                       originalMsg: 'aces b',
+   *                       normalizedStr: 'ace b',
+   *                       tokens: ['ace', 'b'],
+   *                       labels: [{ "label": "not-promo", "value": 2.02002e-8 },
+   *                                { "label": "promo", "value": 1.02002e-9 }],
+   *                    }, ...]
+   */
+  getPromosOnly(printAccReport, unclassifiedPosts) {
+    let classifiedPosts = this.trainClassifier(printAccReport, unclassifiedPosts);
+    let testDataObjs = this._trainAndTestObj['test']; // TODO: Which should automatically be the unclassifiedPosts after training
+    let promos = [];
+
+    for (let i = 0; i < classifiedPosts.length; i++) {
+      if (this._evaluator.isTruePositive(classifiedPosts[i], testDataObjs[i])) {
+        promos.push(classifiedPosts[i]);
+      }
+    }
+
+    return promos;
   }
 
   //==============================================================
@@ -35,7 +63,10 @@ module.exports = class PromoDecisionMaker {
    * Trains the Bayes Classifier and has the option of printing a
    * diagnostic report.
    *
+   * TODO: Remember that test data is essentially unseen data, AKA unclassifiedPosts
+   *
    * @param {Boolean} printAccReport True if diagnostic report is to be printed
+   * @param {[Array]} unclassifiedPosts TODO: MUST BE IN THE TEST OBJ'S SCHEMA
    * @returns {[Array]} [{
    *                       originalMsg: 'aces b',
    *                       normalizedStr: 'ace b',
@@ -44,15 +75,15 @@ module.exports = class PromoDecisionMaker {
    *                                { "label": "promo", "value": 1.02002e-9 }],
    *                    }, ...]
    */
-  trainClassifier(printAccReport) {
-    let trainAndTestObj = this.prepTrainingAndTestData();
+  trainClassifier(printAccReport, unclassifiedPosts) {
+    this._trainAndTestObj = this.prepTrainingAndTestData();
 
     // Train classifier
-    this._bayes.setTraining(trainAndTestObj['train']);
+    this._bayes.setTraining(this._trainAndTestObj['train']);
     this._bayes.train();
 
     // Test the trained classifier
-    let testDataObjs = trainAndTestObj['test']; // Array of { originalMsg: 'a b', tokens: ['a', 'b'], label: 'not-promo' }
+    let testDataObjs = this._trainAndTestObj['test']; // Array of { originalMsg: 'a b', tokens: ['a', 'b'], label: 'not-promo' }
     let testDataStrs = this.stitchIntoString(testDataObjs); // Array of "a b"...
 
     // Prep objects to classify
