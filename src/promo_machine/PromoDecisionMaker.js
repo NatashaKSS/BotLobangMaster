@@ -48,12 +48,20 @@ module.exports = class PromoDecisionMaker {
     let promos = [];
 
     for (let i = 0; i < classifiedPosts.length; i++) {
-      if (this._evaluator.isTruePositive(classifiedPosts[i], testDataObjs[i])) {
+      if (this.isClassifedAsPromo(classifiedPosts[i])) {
         promos.push(classifiedPosts[i]);
       }
     }
 
     return promos;
+  }
+
+  isClassifedAsPromo(classifiedPost) {
+    if (classifiedPost['labels'][0]['label'] === 'promo') {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   //==============================================================
