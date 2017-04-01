@@ -1,12 +1,15 @@
 // Import external libraries
 const _ = require('underscore');
 const PromoDecisionMaker = require('./PromoDecisionMaker.js');
+const TitleConstructor = require('./TitleConstructor.js');
+
 /**
  * Generates valid promos in specified formats fit for pushing to the chatbot
  */
 module.exports = class PromoMachine {
   constructor() {
     this._promoDecisionMaker = new PromoDecisionMaker();
+    this._titleConstructor = new TitleConstructor();
   }
 
   /**
@@ -28,8 +31,8 @@ module.exports = class PromoMachine {
   //==============================================================
   printListOfPromoMsg(listOfObjs) {
     for (let i = 0; i < listOfObjs.length; i++) {
-      console.log(listOfObjs[i]['originalMsg']);
       console.log("=================================");
+      console.log(listOfObjs[i]['originalMsg']);
     }
   }
 }

@@ -6,7 +6,14 @@ module.exports = class TitleConstructor {
   constructor() {
     this._maxChars = 80;
     this._titleFields = {
-
+      brand: "", // E.g. Uber, Grab, Comfort
+      product: "", // E.g. UberPOOL, GrabSHARE
+      amount: "", // E.g. X% OFF, $X OFF
+      ride_opt: "", // E.g. "Weekend Riders", "Rides to and from CBD", "2nd daily ride"
+      ride_freq: "", // E.g. "2 rides", "unlimited rides"
+      promo: "", // E.g. "7POOL", "WKNDRIDER"
+      user_action: "", // E.g. "Take 1 ride & get"
+      user_type: "", // E.g. "1st-Time Users", "2 free rides for 1st-time users with code 1STTIME"
     }
   }
 
@@ -22,7 +29,7 @@ module.exports = class TitleConstructor {
   }
 
   //==============================================================
-  // 
+  // FIELD MANIPULATION
   //==============================================================
 
 
