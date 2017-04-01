@@ -51,9 +51,6 @@ module.exports = class BotHub {
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
     const FBPostsRetriever = this._FBPostsRetriever;
-
-    this._PromoMachine.generatePromo([]);
-
     FBPostsRetriever.getListOfNodes(
       constants.FB_QUERY_OPTIONS,
       ["koithesg"],
@@ -65,6 +62,9 @@ module.exports = class BotHub {
         console.log("========================================");
       }
     );
+
+    // Generate promos from the retrieved promos
+    this._PromoMachine.generatePromos([]);
 
     // ======================================
     // SPIN UP THE SERVER

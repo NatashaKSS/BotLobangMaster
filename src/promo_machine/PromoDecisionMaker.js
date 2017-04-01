@@ -24,7 +24,27 @@ module.exports = class PromoDecisionMaker {
     this._evaluator = new Evaluator();
   }
 
-  trainClassifier() {
+  getPromosOnly() {
+    
+  }
+
+  //==============================================================
+  // TRAINING AND CLASSIFICATION
+  //==============================================================
+  /**
+   * Trains the Bayes Classifier and has the option of printing a
+   * diagnostic report.
+   *
+   * @param {Boolean} printAccReport True if diagnostic report is to be printed
+   * @returns {[Array]} [{
+   *                       originalMsg: 'aces b',
+   *                       normalizedStr: 'ace b',
+   *                       tokens: ['ace', 'b'],
+   *                       labels: [{ "label": "not-promo", "value": 2.02002e-8 },
+   *                                { "label": "promo", "value": 1.02002e-9 }],
+   *                    }, ...]
+   */
+  trainClassifier(printAccReport) {
     let trainAndTestObj = this.prepTrainingAndTestData();
 
     // Train classifier
@@ -32,31 +52,73 @@ module.exports = class PromoDecisionMaker {
     this._bayes.train();
 
     // Test the trained classifier
-    let testDataObjs = trainAndTestObj['test'];
-    let testDataStrs = this.stitchIntoString(testDataObjs);
-    let classificationResults = this.classify(testDataStrs);
+    let testDataObjs = trainAndTestObj['test']; // Array of { originalMsg: 'a b', tokens: ['a', 'b'], label: 'not-promo' }
+    let testDataStrs = this.stitchIntoString(testDataObjs); // Array of "a b"...
 
-    this._evaluator.printClassifierAccuracyReport(
-      classificationResults, testDataObjs);
+    // Prep objects to classify
+    let objsToClassify = this.composeClassificationObjs(testDataObjs);
+    let classificationResults = this.classify(objsToClassify);
+
+    if (printAccReport) {
+      // Print the classification report
+      this._evaluator.printClassifierAccuracyReport(classificationResults, testDataObjs);
+    }
+
+    return classificationResults;
+  }
+
+  /**
+   * Composes objects for classification into a full package containing
+   * it's original and new labelled classification. Prepares the
+   * classification object to be fed into the BayesClassifier.
+   *
+   * @param {[Array]} dataObjs [{ originalMsg: 'aces b',
+   *                               tokens: ['ace', 'b'],
+   *                               label: 'not-promo' }, ...]
+   * @returns {[Array]} [{ originalMsg: 'aces b',
+   *                       normalizedStr: 'ace b',
+   *                       tokens: ['ace', 'b'],
+   *                       label: 'not-promo' }, ...]
+   */
+  composeClassificationObjs(dataObjs) {
+    let composedDataObjs = [];
+    let stitchedTokens = '';
+
+    for (let i = 0; i < dataObjs.length; i++) {
+      stitchedTokens = this.stitchTokensIntoString(dataObjs[i]);
+      composedDataObjs.push({
+        originalMsg: dataObjs[i]['originalMsg'],
+        normalizedStr: stitchedTokens,
+        tokens: dataObjs[i]['tokens'],
+        label: dataObjs[i]['label'],
+      });
+    }
+
+    return composedDataObjs;
   }
 
   /**
    * Prepares training and testing data formats fit for classification by
    * normalizing each FB post's msg into their tokenized form
    *
-   * @param {[Array]} testDataStrs ['weekli uberpopquiz', 'faster secur cost']
-   * @returns {Object} [{ normalizedStr: "weekli uberpopquiz back",
+   * @param {[Array]} objsToClassify [{ originalMsg: 'aces b',
+   *                                    normalizedStr: 'ace b',
+   *                                    tokens: ['ace', 'b'],
+   *                                    label: 'not-promo' }, ...]
+   * @returns {Object} [{ ...objToClassify,
    *                      labels: [{ "label": "not-promo", "value": 2.02002e-8 },
    *                               { "label": "promo", "value": 1.02002e-9 }] }]
    */
-  classify(testDataStrs) {
+  classify(objsToClassify) {
     let classified = [];
 
     // Test on taxi test set of tokenized strings
-    for (let i = 0; i < testDataStrs.length; i++) {
+    for (let i = 0; i < objsToClassify.length; i++) {
       classified.push({
-        normalizedStr: testDataStrs[i],
-        labels: this._bayes.classifyPostMsg(testDataStrs[i])
+        originalMsg: objsToClassify[i]['originalMsg'],
+        normalizedStr: objsToClassify[i]['normalizedStr'],
+        tokens: objsToClassify[i]['tokens'],
+        labels: this._bayes.classifyPostMsg(objsToClassify[i]['normalizedStr'])
       });
     }
     return classified;
@@ -95,12 +157,12 @@ module.exports = class PromoDecisionMaker {
     // Tokenized taxi fixtures
     let tokenizedTaxiFixtures = this.getTokenizedTrainDataFromCategory(Fixtures_TAXI);
 
-    let trainData = _.flatten([tokenizedTaxi, tokenizedYoghurt, tokenizedCoffee,
+    let trainData = _.flatten([tokenizedBubbleTea, tokenizedYoghurt, tokenizedCoffee,
                                tokenizedIceCream, tokenizedFastFood], true);
 
     let trainTestObj = {
       train: trainData,
-      test: tokenizedBubbleTea
+      test: tokenizedTaxi
     }
 
     return trainTestObj;
