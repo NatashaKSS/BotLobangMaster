@@ -91,9 +91,9 @@ module.exports = class Evaluator {
     if (this.isClassifiedCorrectly(actualClassification, expectedEntry) &&
         actualClassification['labels'][0]['label'] === 'promo') {
       // Classified correctly and is a 'promo'
-      return actualClassification;
+      return true;
     } else {
-      return null;
+      return false;
     }
   }
 
