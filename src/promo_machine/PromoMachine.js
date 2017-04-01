@@ -15,8 +15,8 @@ module.exports = class PromoMachine {
    * @param {[Array]} posts Array of FB posts
    * @return {[Array]} Promos fit for FB chatbot
    */
-  generatePromo(posts) {
-    this._promoDecisionMaker.trainClassifier();
+  generatePromos(posts) {
+    let classified = this._promoDecisionMaker.trainClassifier(false);
 
 
     return [{}, {}, {}];
