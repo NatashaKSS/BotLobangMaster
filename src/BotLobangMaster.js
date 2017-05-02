@@ -8,8 +8,7 @@ const FBPostsRetriever = require('./retriever/FBPostsRetriever.js');
 const PromoMachine = require('./promo_machine/PromoMachine.js');
 
 // Import databases
-const Brands = require('./references/brands.js');
-const ClassificationLabels = require('./references/brands.js');
+const Brands = require('./references/lookup/brands.js');
 
 // Import constants
 const constants = require('./lib/constants.js');
