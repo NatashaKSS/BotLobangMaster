@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 // Import other internal dependencies
-const SecurityHandler = require('./SecurityHandler.js');
+const ConfigHandler = require('./ConfigHandler.js');
 const FBPostsRetriever = require('./retriever/FBPostsRetriever.js');
 const PromoMachine = require('./promo_machine/PromoMachine.js');
 
@@ -14,32 +14,23 @@ const Brands = require('./references/lookup/brands.js');
 const constants = require('./lib/constants.js');
 
 /**
- * This class defines BotHub - The IQ of TaxiBot.
  *
- * Performs logical computation of user commands and interacts with third-party
- * APIs (e.g. API.ai and Dashbot.io).
  */
 module.exports = class BotHub {
   constructor () {
     this._app = express();
 
-    // Set up SecurityHandler
-    this._SecurityHandler = new SecurityHandler(this._app);
-    this._SecurityHandler.allConfigsExist();
-
-    // Set up FBPostsRetriever
+    // Set up dependencies
+    this._ConfigHandler = (new ConfigHandler()).allConfigsExist();
     this._FBPostsRetriever = new FBPostsRetriever();
-
-    // Set up PromoMachine
     this._PromoMachine = new PromoMachine();
   }
 
   run() {
-    let app = this._app;
     this._app.set('port', (process.env.PORT || 5005));
 
     // Index route
-    this._app.get('/', function (req, res) {
+    this._app.get('/', (req, res) => {
     	res.send('Hello World! I am BotLobangMaster!');
     })
 
@@ -68,8 +59,8 @@ module.exports = class BotHub {
     // ======================================
     // SPIN UP THE SERVER
     // ======================================
-    this._app.listen(this._app.get('port'), function() {
-      console.log('\nRUNNING ON PORT\n', app.get('port'));
+    this._app.listen(this._app.get('port'), () => {
+      console.log('\nRUNNING ON PORT\n', this._app.get('port'));
     })
   }
 
