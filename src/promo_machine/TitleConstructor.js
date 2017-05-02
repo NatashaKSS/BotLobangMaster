@@ -116,19 +116,12 @@ module.exports = class TitleConstructor {
     return str.match(/([0-9]+\%\s+(off|Off|OFF|discount|Discount|DISCOUNT))/g);
   }
 
-  /*
-  Promo codes (All CAPS)
-  Using RegEx matching
-
-  Problems like:
-  11:59PM gets cut to "PM"
-  #TGIF gets cut to "TGIF" or #TBT: gets cut to #TBT
-  4LESS or 7RIDES gets cut to "LESS" or "RIDES"
-  LESS4 or RIDES7 gets cut to "LESS" or "RIDES"
-
-  FREE! or FREE gets cut to "FREE"
-
-  Match numbers and all CAPS: [0-9A-Z]{2,}
+  /**
+   * Searches through str and obtains a list of promo codes since 1 post may
+   * contain multiple.
+   *
+   * @param  {[String]} str String to extract field from
+   * @return {[Array]}      List of promo codes or null if none are found
    */
   getPromoCodes(str) {
     let tokens = this.tokenize(str);
@@ -143,7 +136,7 @@ module.exports = class TitleConstructor {
             !this.strContainsPunctuation(token) &&
             !this.strContainsTime(token) &&
             !this.strContainsNumberRange(token) &&
-            this.digitsContainAtLeast4Digits(token) &&
+            this.containsAtLeast4Digits(token) &&
             !this.strArrContains(IGNORE_TERMS['promo_code_ig_terms'], token)) {
           // Duplicates will not be tolerated in our extracted list
           // Tokens with punctuation will not be counted
@@ -165,8 +158,8 @@ module.exports = class TitleConstructor {
   //==============================================================
   // REEEALLYYY SMALL STRING MANIPULATION FUNCTIONS
   //==============================================================
-  tokenize(str) {
-    return str.split(/[ .,!?]/g);
+  strContains(str, regex) {
+    return str.match(regex) ? true : false;
   }
 
   strArrContains(arrayOfStrings, searchString) {
@@ -185,26 +178,32 @@ module.exports = class TitleConstructor {
     return this.strContains(str, /^\d+$/gm);
   }
 
-  digitsContainAtLeast4Digits(str) {
+  /**
+   * Check if a string contains ONLY digits and has at least 4 digits
+   * @param  {[type]} str [description]
+   * @return {[type]}     [description]
+   */
+  containsAtLeast4Digits(str) {
     if (this.strContainsOnlyDigits(str)) {
       return this.strContains(str, /[0-9]{4,}/g);
     } else {
-      // If this doesn't contain digits, then it is still valid in this condition
+      // If this doesn't contain digits, e.g. all letters or mix of digits and
+      // letters then it is still valid in this condition
       return true;
     }
   }
 
   strContainsNumberRange(str) {
-    return this.strContains(str, /([0-9]+[-–][0-9]+)/g);
-  }
-
-  strContains(str, regex) {
-    return str.match(regex) ? true : false;
+    return this.strContains(str, /([0-9]+[-][0-9]+)/g);
   }
 
   //=================================================
   // STRING SANITATION FUNCTIONS
   //=================================================
+  tokenize(str) {
+    return str.split(/[ .,!?]/g);
+  }
+
   /**
    * Filters non-unicode characters away
    *
