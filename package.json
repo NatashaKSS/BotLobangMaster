@@ -12,6 +12,7 @@
     "express": "^4.14.1",
     "fbgraph": "^1.4.1",
     "natural": "^0.5.0",
+    "nodemon": "^1.11.0",
     "parsehub": "^0.1.1",
     "request": "^2.79.0",
     "underscore": "^1.8.3"

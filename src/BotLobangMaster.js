@@ -40,8 +40,7 @@ module.exports = class BotHub {
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
-    const FBPostsRetriever = this._FBPostsRetriever;
-    FBPostsRetriever.getListOfNodes(
+    this._FBPostsRetriever.getListOfNodes(
       constants.FB_QUERY_OPTIONS,
       ["koithesg"],
       constants.FB_QUERY_PARAMS_URL,
