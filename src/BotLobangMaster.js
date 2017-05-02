@@ -53,13 +53,14 @@ module.exports = class BotHub {
     );
 
     // Generate promos from the retrieved promos
+    // TODO: Empty list first because we are working with fixtures
     this._PromoMachine.generatePromos([]);
 
     // ======================================
     // SPIN UP THE SERVER
     // ======================================
     this._app.listen(this._app.get('port'), () => {
-      console.log('\nRUNNING ON PORT\n', this._app.get('port'));
+      console.log('RUNNING ON PORT', this._app.get('port'));
     })
   }
 

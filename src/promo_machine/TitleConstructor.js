@@ -77,14 +77,14 @@ module.exports = class TitleConstructor {
    */
   getProduct(str) {
     let productNames = TAXI_PRODUCTS['taxi_product_names']['ALL'];
-    let tokens = str.split(" ");
+    let tokens = this.tokenize(str);
 
     let extractedProductNames = [];
 
     let token = null;
     for (let i = 0; i < tokens.length; i++) {
       for (let j = 0; j < productNames.length; j++) {
-        token = tokens[i];
+        token = this.getOnlyUnicodeChars(tokens[i]);
         if (token.toLowerCase() === productNames[j].toLowerCase()) {
           if (!this.strArrContains(extractedProductNames, token)) {
             // Duplicates will not be tolerated in our extracted list
@@ -131,16 +131,19 @@ module.exports = class TitleConstructor {
   Match numbers and all CAPS: [0-9A-Z]{2,}
    */
   getPromoCodes(str) {
-    let tokens = str.split(" ");
+    let tokens = this.tokenize(str);
 
     let extractedPromoCodes = [];
 
     let token = null;
     for (let i = 0; i < tokens.length; i++) {
-      token = tokens[i];
+      token = this.getOnlyUnicodeChars(tokens[i]);
       if (token === token.toUpperCase()) {
         if (!this.strArrContains(extractedPromoCodes, token) &&
             !this.strContainsPunctuation(token) &&
+            !this.strContainsTime(token) &&
+            !this.strContainsNumberRange(token) &&
+            this.digitsContainAtLeast4Digits(token) &&
             !this.strArrContains(IGNORE_TERMS['promo_code_ig_terms'], token)) {
           // Duplicates will not be tolerated in our extracted list
           // Tokens with punctuation will not be counted
@@ -162,17 +165,62 @@ module.exports = class TitleConstructor {
   //==============================================================
   // REEEALLYYY SMALL STRING MANIPULATION FUNCTIONS
   //==============================================================
+  tokenize(str) {
+    return str.split(/[ .,!?]/g);
+  }
+
   strArrContains(arrayOfStrings, searchString) {
     return arrayOfStrings.indexOf(searchString) > -1;
   }
 
   strContainsPunctuation(str) {
-    let matchResult = str.match(/[,!@#$%^&|*(){}.\\]/g);
-    if (matchResult) {
-      return matchResult.length >= 1;
+    return this.strContains(str, /[,!@#$%^&|*\-(){}.\\]/g);
+  }
+
+  strContainsTime(str) {
+    return this.strContains(str, /(([0-9:]+|[0-9]+)(am|AM|pm|PM))/g);
+  }
+
+  strContainsOnlyDigits(str) {
+    return this.strContains(str, /^\d+$/gm);
+  }
+
+  digitsContainAtLeast4Digits(str) {
+    if (this.strContainsOnlyDigits(str)) {
+      return this.strContains(str, /[0-9]{4,}/g);
     } else {
-      return null;
+      // If this doesn't contain digits, then it is still valid in this condition
+      return true;
     }
   }
 
+  strContainsNumberRange(str) {
+    return this.strContains(str, /([0-9]+[-–][0-9]+)/g);
+  }
+
+  strContains(str, regex) {
+    return str.match(regex) ? true : false;
+  }
+
+  //=================================================
+  // STRING SANITATION FUNCTIONS
+  //=================================================
+  /**
+   * Filters non-unicode characters away
+   *
+   * @param  {[type]} str String to clean up
+   * @return {[type]}     String that's cleaned up with only UTF-8 unicode chars
+   */
+  getOnlyUnicodeChars(str) {
+    var result = "";
+    for (let i = 0; i < str.length; i++) {
+      let charCode = str.charCodeAt(i);
+      if (charCode <= 127) {
+        result += str.charAt(i);
+      } else if (charCode === 8211) { // Weird non-UTF hyphen
+        result += '-';
+      }
+    }
+    return result;
+  }
 }
