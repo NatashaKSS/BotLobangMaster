@@ -10,6 +10,18 @@ module.exports = class PromoMachine {
   constructor() {
     this._promoDecisionMaker = new PromoDecisionMaker();
     this._titleConstructor = new TitleConstructor();
+
+    this._promos = [];
+    /*
+    {
+      title: "",
+      description: "",
+      img_url: "",
+      link_url: "",
+      start_date: "",
+      end_date: "",
+    }
+     */
   }
 
   /**
@@ -19,11 +31,22 @@ module.exports = class PromoMachine {
    * @return {[Array]} Promos fit for FB chatbot
    */
   generatePromos(posts) {
-    let promoObjs = this._promoDecisionMaker.getPromosOnly(false, []);
+    // TODO: FORGOT TO PASS IN BRAND NAME
+    let listOfPromoObjs = this._promoDecisionMaker.getPromosOnly(false, []);
 
-    this.printListOfPromoMsg(promoObjs);
+    // this.printListOfPromoMsg(listOfPromoObjs);
+    this.generateTitles(listOfPromoObjs);
 
     return [{}, {}, {}];
+  }
+
+  //==============================================================
+  // GENERATE TITLES
+  //==============================================================
+  generateTitles(listOfPromoObjs) {
+    for (let i = 0; i < listOfPromoObjs.length; i++) {
+      console.log(this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg'])['promo_code']);
+    }
   }
 
   //==============================================================

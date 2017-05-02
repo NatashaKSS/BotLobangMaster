@@ -13,7 +13,9 @@ const BayesClassifier = new require('../NLP/BayesClassifier.js');
 const Evaluator = new require('../NLP/Evaluator.js');
 
 /**
- * Generates valid promos in specified formats fit for pushing to the chatbot
+ * Decides whether a FB post message is a promo or not
+ *
+ * Main entry point: getPromosOnly
  */
 module.exports = class PromoDecisionMaker {
   constructor() {
@@ -92,7 +94,6 @@ module.exports = class PromoDecisionMaker {
 
     // Test the trained classifier
     let testDataObjs = this._trainAndTestObj['test']; // Array of { originalMsg: 'a b', tokens: ['a', 'b'], label: 'not-promo' }
-    let testDataStrs = this.stitchIntoString(testDataObjs); // Array of "a b"...
 
     // Prep objects to classify
     let objsToClassify = this.composeClassificationObjs(testDataObjs);
