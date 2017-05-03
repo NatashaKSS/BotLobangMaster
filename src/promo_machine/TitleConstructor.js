@@ -1,3 +1,5 @@
+let TextManipulator = require('./../lib/TextManipulator.js');
+
 // Import database of taxi flagship products
 const TAXI_PRODUCTS = require('./../references/lookup/taxi_product_names.js');
 
@@ -10,6 +12,8 @@ const IGNORE_TERMS = require('./../references/lookup/ignore_terms/title/promo_co
  */
 module.exports = class TitleConstructor {
   constructor() {
+    this._TextManipulator = new TextManipulator();
+
     this._maxChars = 80;
 
     // For my own reference
@@ -70,25 +74,26 @@ module.exports = class TitleConstructor {
   // FIELD by FIELD EXTRACTION
   //==============================================================
   /**
-   * Searchs through str to find a list of flagship product names, e.g. uberPOOL, GrabSHARE
+   * Searchs through tokens in str to find a list of flagship product
+   * names, e.g. uberPOOL, GrabSHARE
    *
    * @param {String} str String to extract field from
    * @return {Array} Flagship product names (non-normalized) OR null if not found
    */
   getProduct(str) {
     let productNames = TAXI_PRODUCTS['taxi_product_names']['ALL'];
-    let tokens = this.tokenize(str);
+    let tokens = this._TextManipulator.tokenize(str);
 
     let extractedProductNames = [];
 
     let token = null;
     for (let i = 0; i < tokens.length; i++) {
       for (let j = 0; j < productNames.length; j++) {
-        token = this.getOnlyUnicodeChars(tokens[i]);
+        token = this._TextManipulator.getOnlyUnicodeChars(tokens[i]);
         if (token.toLowerCase() === productNames[j].toLowerCase()) {
-          if (!this.strArrContains(extractedProductNames, token)) {
+          if (!this._TextManipulator.strArrContains(extractedProductNames, token)) {
             // Duplicates will not be tolerated in our extracted list
-            extractedProductNames.push(token); // Get original word (no lower case)
+            extractedProductNames.push(token); // Save original token (no lowercase)
           }
         }
       }
@@ -102,17 +107,30 @@ module.exports = class TitleConstructor {
     }
   }
 
+  /**
+   * Get price field:
+   *   - Get dollar sign
+   *   - Get digits 3, 3.0, 3.33, but not more than 2 digits after decimal
+   *     (e.g. 3.33333) and any number of spaces after
+   *   - Get off OR discount words and any number of spaces after
+   *
+   * @param  {[String]} str Input string to extract from
+   * @return {[String]}     Price field
+   */
   getPrice(str) {
-    // Get dollar sign
-    // Get digits 3, 3.0, 3.33, but not more than 2 digits after decimal (e.g. 3.33333) and any number of spaces after
-    // Get off OR discount words and any number of spaces after
     return str.match(/(\$[0-9]+(\.[0-9]{2})?\s+(off|Off|OFF|discount|DISCOUNT|Discount))/g);
   }
 
+  /**
+   * Get percentage field:
+   *   - Get digits 3, 3.0, 3.33, and any number of spaces after
+   *   - Get dollar sign
+   *   - Get off, discount words and any number of spaces after
+   *
+   * @param  {[String]} str Input string to extract from
+   * @return {[String]}     Percentage field
+   */
   getPercentage(str) {
-    // Get digits 3, 3.0, 3.33, and any number of spaces after
-    // Get dollar sign
-    // Get off, discount words and any number of spaces after
     return str.match(/([0-9]+\%\s+(off|Off|OFF|discount|Discount|DISCOUNT))/g);
   }
 
@@ -124,29 +142,27 @@ module.exports = class TitleConstructor {
    * @return {[Array]}      List of promo codes or null if none are found
    */
   getPromoCodes(str) {
-    let tokens = this.tokenize(str);
+    let tokens = this._TextManipulator.tokenize(str);
 
     let extractedPromoCodes = [];
 
     let token = null;
     for (let i = 0; i < tokens.length; i++) {
-      token = this.getOnlyUnicodeChars(tokens[i]);
+      token = this._TextManipulator.getOnlyUnicodeChars(tokens[i]);
       if (token === token.toUpperCase()) {
-        if (!this.strArrContains(extractedPromoCodes, token) &&
-            !this.strContainsPunctuation(token) &&
-            !this.strContainsTime(token) &&
-            !this.strContainsNumberRange(token) &&
-            this.containsAtLeast4Digits(token) &&
-            !this.strArrContains(IGNORE_TERMS['promo_code_ig_terms'], token)) {
+        if (!this._TextManipulator.strArrContains(extractedPromoCodes, token) &&
+            !this._TextManipulator.strContainsPunctuation(token) &&
+            !this._TextManipulator.strContainsTime(token) &&
+            !this._TextManipulator.strContainsNumberRange(token) &&
+            this._TextManipulator.containsAtLeast4Digits(token) &&
+            !this._TextManipulator.strArrContains(IGNORE_TERMS['promo_code_ig_terms'], token)) {
           // Duplicates will not be tolerated in our extracted list
-          // Tokens with punctuation will not be counted
           if (token.length > 0) {
-            extractedPromoCodes.push(token); // Get original word (no lower case)
+            extractedPromoCodes.push(token); // Save original token (no lowercase)
           }
         }
       }
     }
-
     // If we didn't find any promo codes, return null
     if (extractedPromoCodes.length == 0) {
       return null;
@@ -155,71 +171,4 @@ module.exports = class TitleConstructor {
     }
   }
 
-  //==============================================================
-  // REEEALLYYY SMALL STRING MANIPULATION FUNCTIONS
-  //==============================================================
-  strContains(str, regex) {
-    return str.match(regex) ? true : false;
-  }
-
-  strArrContains(arrayOfStrings, searchString) {
-    return arrayOfStrings.indexOf(searchString) > -1;
-  }
-
-  strContainsPunctuation(str) {
-    return this.strContains(str, /[,!@#$%^&|*\-(){}.\\]/g);
-  }
-
-  strContainsTime(str) {
-    return this.strContains(str, /(([0-9:]+|[0-9]+)(am|AM|pm|PM))/g);
-  }
-
-  strContainsOnlyDigits(str) {
-    return this.strContains(str, /^\d+$/gm);
-  }
-
-  /**
-   * Check if a string contains ONLY digits and has at least 4 digits
-   * @param  {[type]} str [description]
-   * @return {[type]}     [description]
-   */
-  containsAtLeast4Digits(str) {
-    if (this.strContainsOnlyDigits(str)) {
-      return this.strContains(str, /[0-9]{4,}/g);
-    } else {
-      // If this doesn't contain digits, e.g. all letters or mix of digits and
-      // letters then it is still valid in this condition
-      return true;
-    }
-  }
-
-  strContainsNumberRange(str) {
-    return this.strContains(str, /([0-9]+[-][0-9]+)/g);
-  }
-
-  //=================================================
-  // STRING SANITATION FUNCTIONS
-  //=================================================
-  tokenize(str) {
-    return str.split(/[ .,!?]/g);
-  }
-
-  /**
-   * Filters non-unicode characters away
-   *
-   * @param  {[type]} str String to clean up
-   * @return {[type]}     String that's cleaned up with only UTF-8 unicode chars
-   */
-  getOnlyUnicodeChars(str) {
-    var result = "";
-    for (let i = 0; i < str.length; i++) {
-      let charCode = str.charCodeAt(i);
-      if (charCode <= 127) {
-        result += str.charAt(i);
-      } else if (charCode === 8211) { // Weird non-UTF hyphen
-        result += '-';
-      }
-    }
-    return result;
-  }
 }
