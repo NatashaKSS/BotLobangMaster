@@ -18,14 +18,12 @@ module.exports = class TitleConstructor {
 
     // For my own reference
     this._titleFields = {
+      user_type: "", // E.g. "Take 1 ride [& get]", "1st-Time users", "DBS/POSB/OCBC/GrabPay users"
       brand: "", // E.g. Uber, Grab, Comfort
       product: "", // E.g. UberPOOL, GrabSHARE
       amount: "", // E.g. X% OFF, $X OFF
-      ride_opt: "", // E.g. "Weekend Riders", "Rides to and from CBD", "2nd daily ride"
-      ride_freq: "", // E.g. "2 rides", "unlimited rides"
+      ride_type: "", // E.g. "weekend rides", "rides to and from CBD", "2nd daily ride", "2 rides"
       promo_code: "", // E.g. "7POOL", "WKNDRIDER"
-      user_action: "", // E.g. "Take 1 ride & get"
-      user_type: "", // E.g. "1st-Time Users", "2 free rides for 1st-time users with code 1STTIME"
     }
   }
 
@@ -42,16 +40,16 @@ module.exports = class TitleConstructor {
    */
   getTitle(promoText, brand) {
     let titleFields = {
+      user_type: "",
       brand: "",
       product: "",
       'amount_$': [],
       'amount_%': [],
-      ride_opt: "",
-      ride_freq: "",
+      ride_type: "",
       promo_code: "",
-      user_action: "",
-      user_type: ""
     }
+
+    titleFields['user_type'] = "";
 
     titleFields['brand'] = "";
     titleFields['product'] = this.getProduct(promoText);
@@ -59,13 +57,9 @@ module.exports = class TitleConstructor {
     titleFields['amount_$'] = this.getPrice(promoText);
     titleFields['amount_%'] = this.getPercentage(promoText);
 
-    titleFields['ride_opt'] = "";
-    titleFields['ride_freq'] = "";
+    titleFields['ride_type'] = this.getRideType(promoText);
 
     titleFields['promo_code'] = this.getPromoCodes(promoText);
-
-    titleFields['user_action'] = "";
-    titleFields['user_type'] = "";
 
     return titleFields;
   }
@@ -169,6 +163,10 @@ module.exports = class TitleConstructor {
     } else {
       return extractedPromoCodes;
     }
+  }
+
+  getRideType(str) {
+
   }
 
 }
