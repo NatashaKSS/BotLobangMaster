@@ -40,17 +40,17 @@ module.exports = class BotHub {
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
-    this._FBPostsRetriever.getListOfNodes(
-      constants.FB_QUERY_OPTIONS,
-      ["koithesg"],
-      constants.FB_QUERY_PARAMS_URL,
-      function(posts) {
-        console.log("========================================");
-        console.log("GET LIST OF POSTS FROM ALL BRANDS:");
-        console.log(posts['koithesg'][0]);
-        console.log("========================================");
-      }
-    );
+    // this._FBPostsRetriever.getListOfNodes(
+    //   constants.FB_QUERY_OPTIONS,
+    //   ["koithesg"],
+    //   constants.FB_QUERY_PARAMS_URL,
+    //   function(posts) {
+    //     console.log("========================================");
+    //     console.log("GET LIST OF POSTS FROM ALL BRANDS:");
+    //     console.log(posts['koithesg'][0]);
+    //     console.log("========================================");
+    //   }
+    // );
 
     // Generate promos from the retrieved promos
     // TODO: Empty list first because we are working with fixtures
