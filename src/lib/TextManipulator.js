@@ -69,6 +69,23 @@ module.exports = class TextManipulator {
   }
 
   /**
+   * Checks if a string contains any one of the words in wordsArr
+   *
+   * @param  {[type]} str      String to extract regex from
+   * @param  {[type]} wordsArr List of words to check if exists
+   * @return {[type]}          The matched word/phrase, false if none found
+   */
+  strMatchWordsArr(str, wordsArr) {
+    for (let i = 0; i < wordsArr.length; i++) {
+      let match = str.match(wordsArr[i]);
+      if (match) {
+        return match[0]; // the string that was matched by a word in wordsArr
+      }
+    }
+    return false;
+  }
+
+  /**
    * Checks if an array of strings contains a specified string
    *
    * @param  {[Array]} strs Array of strings to check if contains
