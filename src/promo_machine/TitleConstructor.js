@@ -4,7 +4,10 @@ let TextManipulator = require('./../lib/TextManipulator.js');
 const TAXI_PRODUCTS = require('./../references/lookup/taxi_product_names.js');
 
 // Import database of
-const IGNORE_TERMS = require('./../references/lookup/ignore_terms/title/promo_code_ig_terms.js');
+const PROMO_CODE_IGNORE_TERMS = require('./../references/lookup/ignore_terms/title/promo_code_ig_terms.js');
+const RIDE_TYPE_IGNORE_TERMS = require('./../references/lookup/ignore_terms/title/ride_types.js');
+const RIDE_TYPES = require('./../references/lookup/keywords/title/ride_types.js');
+const USER_ACTION_TYPES = require('./../references/lookup/keywords/title/user_actions.js');
 
 /**
  * Extracts title information from a promo's text field and
@@ -149,7 +152,7 @@ module.exports = class TitleConstructor {
             !this._TextManipulator.strContainsTime(token) &&
             !this._TextManipulator.strContainsNumberRange(token) &&
             this._TextManipulator.containsAtLeast4Digits(token) &&
-            !this._TextManipulator.strArrContains(IGNORE_TERMS['promo_code_ig_terms'], token)) {
+            !this._TextManipulator.strArrContains(PROMO_CODE_IGNORE_TERMS['promo_code_ig_terms'], token)) {
           // Duplicates will not be tolerated in our extracted list
           if (token.length > 0) {
             extractedPromoCodes.push(token); // Save original token (no lowercase)
@@ -166,7 +169,143 @@ module.exports = class TitleConstructor {
   }
 
   getRideType(str) {
+    let tokens = this._TextManipulator.tokenizeToLowerCase(str);
+    let resultRideType = null;
 
+    for (let i = 0; i < tokens.length; i++) {
+      let token = tokens[i];
+
+      // Deal with contextual tokens around keywords like "ride(s)"
+      if (token === RIDE_TYPES.keyword_singular || token === RIDE_TYPES.keyword_plural ||
+          token === RIDE_TYPES.keyword_singular_cdg || token === RIDE_TYPES.keyword_plural_cdg) {
+        let candidateRideTypeTokens = this._TextManipulator.getSurroundingText(tokens, tokens.indexOf(token, i), 5);
+        let candidateRideTypePhrase = this._TextManipulator.stitchStringTokens(candidateRideTypeTokens);
+        console.log(candidateRideTypePhrase);
+
+        if (!this.getUserAction(candidateRideTypePhrase)) {
+          // If this phrase is not a user action, extract modifiers
+
+          for (let j = 0; j < candidateRideTypeTokens.length; j++) {
+            let rideTypeToken = candidateRideTypeTokens[j];
+
+            if (this.tokenIsValid(rideTypeToken)) {
+              // Modifier extraction for valid tokens
+              if (this._TextManipulator.strArrContains(RIDE_TYPES.terms.second_daily_ride, rideTypeToken)) {
+                resultRideType = "2nd daily ride";
+                break;
+              } else if (this._TextManipulator.strContains(str, RIDE_TYPES.terms.first_two[0]) ||
+                         this._TextManipulator.strContains(str, RIDE_TYPES.terms.first_two[1])) {
+                resultRideType = "first 2 rides";
+                break;
+              } else if (this._TextManipulator.strArrContains(RIDE_TYPES.terms.night, rideTypeToken)) {
+                resultRideType = "midnight rides";
+                break;
+              } else if (this._TextManipulator.strContainsOnlyDigits(rideTypeToken)) {
+                resultRideType = this.getNumericRideType(candidateRideTypeTokens, rideTypeToken);
+                break;
+              } else if (this._TextManipulator.strArrContains(RIDE_TYPES.terms.am, rideTypeToken)) {
+                resultRideType = "AM ride";
+                break;
+              } else if (this._TextManipulator.strArrContains(RIDE_TYPES.terms.pm, rideTypeToken)) {
+                resultRideType = "PM ride";
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+    if (resultRideType !== null) {
+      return resultRideType;
+    } else if (this._TextManipulator.strArrContains(tokens, RIDE_TYPES.keyword_singular) ||
+               this._TextManipulator.strArrContains(tokens, RIDE_TYPES.keyword_singular_cdg)) {
+      return "ride";
+    } else if (this._TextManipulator.strArrContains(tokens, RIDE_TYPES.keyword_plural) ||
+               this._TextManipulator.strArrContains(tokens, RIDE_TYPES.keyword_plural_cdg)) {
+      // Default if we do find "ride" or "rides" in the sentence but not any other modifier like a digit
+      return "rides";
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Determines if token is valid or not, usually when that token
+   * is in the dictionary of tokens that need to be ignored
+   *
+   * @param  {[String]} token Word to check
+   * @return {[Boolean]}      True if is an invalid token, false otherwise
+   */
+  tokenIsValid(token) {
+    let result =
+      !this._TextManipulator.strArrContains(RIDE_TYPE_IGNORE_TERMS.year, token) &&
+      !this._TextManipulator.strArrContains(RIDE_TYPE_IGNORE_TERMS.redemptions, token);
+    return result;
+  }
+
+  /**
+   * Obtains the number attached to a "ride" or "rides" keyword
+   * before the keyword and ignores the one after. This is based
+   * on the assumption that a number occurring after the keyword
+   * is usually unrelated to the keyword itself, e.g. Dates.
+   *
+   * @param  {[Array]} contextTokens    List of contextual phrasal tokens
+   * @param  {[String]} digitToken   Token of reference in the contextual phrase
+   * @return {[String]}                 Appropriate ride type token based on whether the
+   *                                    number is related/unrelated to the keyword
+   */
+  getNumericRideType(contextTokens, digitToken) {
+    let posOfKeyword = this.getPosOfKeyWord(contextTokens);
+    let posOfRideTypeToken = contextTokens.indexOf(digitToken);
+    let rideTypeTokenIsPresent = posOfRideTypeToken > -1;
+
+    // console.log("pos of ride type token", digitToken, posOfRideTypeToken);
+
+    if (posOfRideTypeToken < posOfKeyword  && rideTypeTokenIsPresent) {
+      // If a digit occurs before the word "ride", most likely correct
+      let numRides = parseInt(digitToken);
+      if (numRides <= 1) {
+        return digitToken + " ride";
+      } else {
+        return digitToken + " rides";
+      }
+    } else {
+      return "rides";
+    }
+  }
+
+  /**
+   * Gets the position of the keyword within a list of contextual
+   * tokens
+   *
+   * @param  {[Array]} contextTokens List of contextual phrasal tokens
+   * @return {[Int]}                 Position of keyword, if found.
+   *                                 Returns -1 if not found in list.
+   */
+  getPosOfKeyWord(contextTokens) {
+    let posOfKeyword = -1;
+    let keyword1 = RIDE_TYPES.keyword_singular;
+    let keyword2 = RIDE_TYPES.keyword_plural;
+
+    if (this._TextManipulator.strArrContains(contextTokens, keyword1)) {
+      posOfKeyword = contextTokens.indexOf(keyword1);
+    } else if (this._TextManipulator.strArrContains(contextTokens, keyword2)) {
+      posOfKeyword = contextTokens.indexOf(keyword2);
+    }
+    return posOfKeyword;
+  }
+
+  getUserAction(str) {
+    let tokens = this._TextManipulator.tokenizeToLowerCase(str);
+    let userActionTerms = USER_ACTION_TYPES.terms.take_one_ride;
+
+    for (let i = 0; i < userActionTerms.length; i++) {
+      if (this._TextManipulator.strArrContains(str, userActionTerms[i])) {
+        return "Take 1 ride and";
+      }
+    }
+
+    return null;
   }
 
 }
