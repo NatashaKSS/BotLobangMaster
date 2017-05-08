@@ -7,8 +7,51 @@ module.exports = class TextManipulator {
   //=================================================
   // GENERAL FUNCTIONS
   //=================================================
+  /**
+   * Simple tokenizer that splits on whitespaces and the punctuations .,!?
+   *
+   * @param  {[String]} str Input String to tokenize
+   * @return {[Array]}      Array of Strings
+   */
   tokenize(str) {
-    return str.split(/[ .,!?]/g);
+    return str.split(/[ .,!?]+/g);
+  }
+
+  /**
+   * Simple tokenizer that splits on whitespaces and the punctuations .,!?
+   * and converts all tokens to lower case
+   *
+   * @param  {[String]} str Input String to tokenize
+   * @return {[Array]}      Array of lowercase Strings
+   */
+  tokenizeToLowerCase(str) {
+    return str.toLowerCase().split(/[ .!?]+/g);
+  }
+
+  getSurroundingText(listOfTokens, indexOfReferenceToken, numNeighbours) {
+    let surroundingTokens = [];
+    let start = this.getStartOfSurroundingText(indexOfReferenceToken, numNeighbours);
+    let end = this.getEndOfSurroundingText(indexOfReferenceToken, numNeighbours, listOfTokens.length)
+    for (let i = start; i < end + 1; i++) {
+      surroundingTokens.push(listOfTokens[i]);
+    }
+    return surroundingTokens;
+  }
+
+  getStartOfSurroundingText(indexOfReferenceToken, numNeighbours) {
+    let ref = indexOfReferenceToken - numNeighbours;
+    if (ref < 0) {
+      ref = 0;
+    }
+    return ref;
+  }
+
+  getEndOfSurroundingText(indexOfReferenceToken, numNeighbours, numTokens) {
+    let ref = indexOfReferenceToken + numNeighbours;
+    if (ref > numTokens) {
+      ref = numTokens - 1;
+    }
+    return ref;
   }
 
   //=================================================
@@ -28,13 +71,13 @@ module.exports = class TextManipulator {
   /**
    * Checks if an array of strings contains a specified string
    *
-   * @param  {[Array]} arrayOfStrings Array of strings to check if contains
+   * @param  {[Array]} strs Array of strings to check if contains
    *                                  a specified string
    * @param  {[String]} searchString  Input string to check
    * @return {[Boolean]}              True if str has Regex, false otherwise
    */
-  strArrContains(arrayOfStrings, searchString) {
-    return arrayOfStrings.indexOf(searchString) > -1;
+  strArrContains(strs, searchString) {
+    return strs.indexOf(searchString) > -1;
   }
 
   /**
@@ -78,7 +121,8 @@ module.exports = class TextManipulator {
   }
 
   /**
-   * Check if a string contains ONLY digits and has at least 4 digits
+   * For strings that contain ONLY digits, check if it has at
+   * least 4 digits.
    *
    * @param  {[String]} str   Input string to check
    * @return {[Boolean]}      True if str has digits only and has at least 4,
@@ -88,8 +132,7 @@ module.exports = class TextManipulator {
     if (this.strContainsOnlyDigits(str)) {
       return this.strContains(str, /[0-9]{4,}/g);
     } else {
-      // If this doesn't contain digits, e.g. all letters or mix of digits and
-      // letters then it is still valid in this condition
+      // All letters or mix of digits/letters they're still valid
       return true;
     }
   }
@@ -114,6 +157,20 @@ module.exports = class TextManipulator {
       }
     }
     return result;
+  }
+
+  /**
+   * Concatenates list of tokens to form 1 string
+   *
+   * @param  {[type]} tokens [description]
+   * @return {[type]}        [description]
+   */
+  stitchStringTokens(tokens) {
+    let str = "";
+    for (let i = 0; i < tokens.length; i++) {
+      str += tokens[i] + " ";
+    }
+    return str;
   }
 
 }
