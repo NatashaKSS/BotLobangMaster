@@ -52,7 +52,7 @@ module.exports = class TitleConstructor {
       promo_code: "",
     }
 
-    titleFields['user_type'] = "";
+    titleFields['user_type'] = this.getUserAction(promoText);
 
     titleFields['brand'] = "";
     titleFields['product'] = this.getProduct(promoText);
@@ -180,7 +180,6 @@ module.exports = class TitleConstructor {
           token === RIDE_TYPES.keyword_singular_cdg || token === RIDE_TYPES.keyword_plural_cdg) {
         let candidateRideTypeTokens = this._TextManipulator.getSurroundingText(tokens, tokens.indexOf(token, i), 5);
         let candidateRideTypePhrase = this._TextManipulator.stitchStringTokens(candidateRideTypeTokens);
-        console.log(candidateRideTypePhrase);
 
         if (!this.getUserAction(candidateRideTypePhrase)) {
           // If this phrase is not a user action, extract modifiers
@@ -229,6 +228,26 @@ module.exports = class TitleConstructor {
     }
   }
 
+  getUserAction(str) {
+    let userActions = [null, null];
+
+    if (this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.take_one_ride)) {
+      userActions[0] = "Take 1 ride &";
+    }
+
+    let payWith = this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.pay_with);
+    let card = this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.credit_cards);
+
+    if (payWith && card) {
+      userActions[1] = payWith + " " + card;
+    }
+
+    return userActions;
+  }
+
+  //=================================================
+  // HELPER FUNCTIONS
+  //=================================================
   /**
    * Determines if token is valid or not, usually when that token
    * is in the dictionary of tokens that need to be ignored
@@ -293,19 +312,6 @@ module.exports = class TitleConstructor {
       posOfKeyword = contextTokens.indexOf(keyword2);
     }
     return posOfKeyword;
-  }
-
-  getUserAction(str) {
-    let tokens = this._TextManipulator.tokenizeToLowerCase(str);
-    let userActionTerms = USER_ACTION_TYPES.terms.take_one_ride;
-
-    for (let i = 0; i < userActionTerms.length; i++) {
-      if (this._TextManipulator.strArrContains(str, userActionTerms[i])) {
-        return "Take 1 ride and";
-      }
-    }
-
-    return null;
   }
 
 }
