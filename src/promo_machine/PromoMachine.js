@@ -45,7 +45,8 @@ module.exports = class PromoMachine {
   //==============================================================
   generateTitles(listOfPromoObjs) {
     for (let i = 0; i < listOfPromoObjs.length; i++) {
-      console.log(i + 1, this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg'])['ride_opt']);
+      console.log(i + 1, this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg'])['ride_type']);
+      console.log("---")
     }
   }
 
