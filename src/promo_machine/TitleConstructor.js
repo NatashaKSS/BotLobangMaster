@@ -1,3 +1,7 @@
+let Sherlock = require('./../external_modules/Sherlock-master/sherlock.js');
+let chrono = require('chrono-node');
+let momentTimezone = require('moment-timezone');
+
 let TextManipulator = require('./../lib/TextManipulator.js');
 
 // Import database of taxi flagship products
@@ -111,8 +115,94 @@ module.exports = class TitleConstructor {
   //=================================================
   // PROCESS DATES
   //=================================================
+  /**
+   * Extract date ranges using Natural Language date parser libs.
+   * We use 2 different types of libraries to handle a couple of
+   * specific cases identified by a regex pattern.
+   *
+   * @param  {[type]} str [description]
+   * @return {[type]}     [description]
+   */
   getDate(str) {
-    return "10 June 2017"
+    if (str.indexOf("till") > -1) {
+      // Chrono handles dates without "till" better
+      return this.getChronoDate(str);
+    } else {
+      // Watson handles dates with ranges better
+      return this.getWatsonDate(str);
+    }
+  }
+
+  /**
+   * Extracts Date ranges using the Chrono library.
+   *
+   * Chrono is better for extracting dates embedded in longer
+   * paragraphs and takes casual language better, e.g. "till Friday"
+   *
+   * @param  {[String]} str String to parse
+   * @return {[type]}       Object representing start and end dates
+   * {
+   *   start: <Date Obj>,
+   *   end: <Date Obj>
+   * }
+   */
+  getChronoDate(str) {
+    let parsedDate = chrono.parse(str);
+    let parsedDateResult = {
+      start: null,
+      end: null
+    }
+    if (parsedDate) {
+      // console.log("======", str[0], str[1], str [2])
+      for (let i = 0; i < parsedDate.length; i++) {
+        let start = parsedDate[i].start;
+        let end = parsedDate[i].end;
+        if (start) {
+          parsedDateResult.start = momentTimezone(start.date()).tz("Asia/Singapore").format();
+          // console.log("Start: ", parsedDateResult.start.toString())
+        }
+        if (end) {
+          parsedDateResult.end = momentTimezone(end.date()).tz("Asia/Singapore").format();
+          // console.log("End:", parsedDateResult.end.toString());
+        } else {
+          // Set end date to start date since promos can only have 1 end date
+          parsedDateResult.end = parsedDateResult.start;
+          parsedDateResult.start = null;
+        }
+      }
+      // console.log("======")
+      return parsedDateResult;
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Extracts Date ranges using the Watson library.
+   *
+   * Watson is better for extracting structured dates like
+   * "Monday, 12AM - Friday 11:59PM"
+   *
+   * @param  {[String]} str String to parse
+   * @return {[type]}       Object representing start and end dates
+   * {
+   *   start: <Date Obj>,
+   *   end: <Date Obj>
+   * }
+   */
+  getWatsonDate(str) {
+    let parsedDateResult = {
+      start: null,
+      end: null
+    }
+    if (str.indexOf("till") == -1) {
+      let parsedDate = Sherlock.parse(str);
+      parsedDateResult.start = momentTimezone(new Date(parsedDate.startDate)).tz("Asia/Singapore").format();
+      parsedDateResult.end = momentTimezone(new Date(parsedDate.endDate)).tz("Asia/Singapore").format();
+      return parsedDateResult;
+    } else {
+      return null;
+    }
   }
 
   //=================================================
