@@ -6,9 +6,14 @@ module.exports = {
   keyword_singular: "taxi",
   keyword_singular_cdg: "taxis",
   terms: {
-    UBER: ["uberx", "uberxl", "uberexec", "execlarge", "ubertaxi", "uberpool", "pool"],
+    UBER: ["uberx", "uberxl", "uberexec", "execlarge", "ubertaxi", "uberpool"],
     GRAB: ["grabcar", "grabtaxi", "grabhitch", "grabshare", "justgrab", "grabfamily"],
     COMFORT: [],
+  },
+  synonyms: { // Case sensitive to avoid overlapping words
+    UBER: {
+      uberPOOL: ["POOL"],
+    }
   },
   ignore_terms: {
   }

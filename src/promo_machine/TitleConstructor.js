@@ -72,7 +72,8 @@ module.exports = class TitleConstructor {
    * @return {Array} Flagship product names (non-normalized) OR null if not found
    */
   getProduct(str) {
-    let productNames = TAXI_PRODUCTS['terms']['UBER'].concat(TAXI_PRODUCTS['terms']['GRAB']).concat(TAXI_PRODUCTS['terms']['COMFORT']);
+    let taxiProducts = TAXI_PRODUCTS['terms']['UBER'].concat(TAXI_PRODUCTS['terms']['GRAB']).concat(TAXI_PRODUCTS['terms']['COMFORT']);
+    let productNames = taxiProducts.concat(TAXI_PRODUCTS['synonyms']['UBER']['uberPOOL'])
     let tokens = this._TextManipulator.tokenize(str);
 
     let extractedProductNames = [];
@@ -84,7 +85,7 @@ module.exports = class TitleConstructor {
         if (token.toLowerCase() === productNames[j].toLowerCase()) {
           if (!this._TextManipulator.strArrContains(extractedProductNames, token)) {
             // Duplicates will not be tolerated in our extracted list
-            extractedProductNames.push(token); // Save original token (no lowercase)
+            extractedProductNames.push(this.extractProductSynonym(token, TAXI_PRODUCTS['synonyms'])); // Save original token (no lowercase)
           }
         }
       }
@@ -95,6 +96,15 @@ module.exports = class TitleConstructor {
       return null;
     } else {
       return extractedProductNames;
+    }
+  }
+
+  extractProductSynonym(str, synonyms) {
+    let synonymList = synonyms['UBER']['uberPOOL'];
+    if (this._TextManipulator.strArrContains(synonymList, str)) {
+      return 'uberPOOL';
+    } else {
+      return str;
     }
   }
 
