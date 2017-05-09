@@ -45,7 +45,7 @@ module.exports = class TitleConstructor {
     }
 
     titleFields['user_type'] = this.getUserAction(promoText);
-    titleFields['brand'] = "";
+    titleFields['brand'] = brand;
     titleFields['product'] = this.getProduct(promoText);
     titleFields['date'] = this.getDate(promoText);
     titleFields['amount_$'] = this.getPrice(promoText);

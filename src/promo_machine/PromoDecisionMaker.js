@@ -50,7 +50,6 @@ module.exports = class PromoDecisionMaker {
     // Comment this out if assessing acc report and not working on actual
     // FB posts. Then the above classifiedPosts will be used instead.
     classifiedPosts = this.classify(this.composeFBPostPromos(unclassifiedPosts));
-    console.log(this.composeFBPostPromos(unclassifiedPosts))
 
     let promos = [];
     for (let i = 0; i < classifiedPosts.length; i++) {

@@ -24,22 +24,22 @@ module.exports = class PromoMachine {
    */
   generatePromos(posts) {
     let listOfPromoObjs = this._promoDecisionMaker.getPromosOnly(false, posts);
-    let promos = this.decipherPromoObj(listOfPromoObjs);
+    let promos = this.decipherPromoObjs(listOfPromoObjs);
     this._promoAirTableHandler.sendToAirTable("Taxi_FB", promos);
   }
 
   //==============================================================
   // GENERATE TITLES
   //==============================================================
-  decipherPromoObj(listOfPromoObjs) {
+  decipherPromoObjs(listOfPromoObjs) {
     let decipheredPromos = [];
     for (let i = 0; i < listOfPromoObjs.length; i++) {
-      let extractedPromoObj = this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg']);
+      let extractedPromoObj = this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg'], listOfPromoObjs[i]['brand']);
 
       // We only count a promo with a promo code as a valid one
       if (extractedPromoObj["promo_code"]) {
         decipheredPromos.push({
-          brand: listOfPromoObjs[i]['brand'],
+          brand: extractedPromoObj['brand'],
           promoObj: extractedPromoObj,
           title: this._promoSentenceConstructor.generateTaxiPromoTitle(extractedPromoObj),
           description: this._promoSentenceConstructor.generateTaxiPromoDescription(extractedPromoObj),

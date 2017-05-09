@@ -30,7 +30,7 @@ module.exports = class PromoAirTableHandler {
           title: title,
           description: description,
           image: null,
-          brand: promo.brand,
+          brand: promos[i].brand,
           product: JSON.stringify(promo.product),
           amount_$: JSON.stringify(promo["amount_$"]),
           "amount_%": JSON.stringify(promo["amount_%"]),
