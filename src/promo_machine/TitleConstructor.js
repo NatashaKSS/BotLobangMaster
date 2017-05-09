@@ -8,6 +8,7 @@ const PROMO_CODE_IGNORE_TERMS = require('./../references/lookup/ignore_terms/tit
 const RIDE_TYPE_IGNORE_TERMS = require('./../references/lookup/ignore_terms/title/ride_types.js');
 const RIDE_TYPES = require('./../references/lookup/keywords/title/ride_types.js');
 const USER_ACTION_TYPES = require('./../references/lookup/keywords/title/user_actions.js');
+const REDEMPTIONS = require('./../references/lookup/keywords/title/redemptions.js');
 
 /**
  * Extracts title information from a promo's text field and
@@ -50,25 +51,27 @@ module.exports = class TitleConstructor {
       'amount_%': [],
       ride_type: "",
       promo_code: "",
+      redemptions: "",
     }
 
     titleFields['user_type'] = this.getUserAction(promoText);
-
     titleFields['brand'] = "";
     titleFields['product'] = this.getProduct(promoText);
-
     titleFields['amount_$'] = this.getPrice(promoText);
     titleFields['amount_%'] = this.getPercentage(promoText);
-
     titleFields['ride_type'] = this.getRideType(promoText);
-
     titleFields['promo_code'] = this.getPromoCodes(promoText);
+    titleFields['redemptions'] = this.getRedemptions(promoText);
 
     return titleFields;
   }
 
   //==============================================================
   // FIELD by FIELD EXTRACTION
+  //==============================================================
+
+  //==============================================================
+  // PROCESS PRODUCT NAME
   //==============================================================
   /**
    * Searchs through tokens in str to find a list of flagship product
@@ -104,6 +107,9 @@ module.exports = class TitleConstructor {
     }
   }
 
+  //=================================================
+  // PROCESS PRICE
+  //=================================================
   /**
    * Get price field:
    *   - Get dollar sign
@@ -118,6 +124,9 @@ module.exports = class TitleConstructor {
     return str.match(/(\$[0-9]+(\.[0-9]{2})?\s+(off|Off|OFF|discount|DISCOUNT|Discount))/g);
   }
 
+  //=================================================
+  // PROCESS PERCENTAGE
+  //=================================================
   /**
    * Get percentage field:
    *   - Get digits 3, 3.0, 3.33, and any number of spaces after
@@ -131,6 +140,9 @@ module.exports = class TitleConstructor {
     return str.match(/([0-9]+\%\s+(off|Off|OFF|discount|Discount|DISCOUNT))/g);
   }
 
+  //=================================================
+  // PROCESS PROMO CODES
+  //=================================================
   /**
    * Searches through str and obtains a list of promo codes since 1 post may
    * contain multiple.
@@ -168,6 +180,15 @@ module.exports = class TitleConstructor {
     }
   }
 
+  //=================================================
+  // PROCESS RIDE TYPE
+  //=================================================
+  /**
+   * Extracts ride type, e.g. "2nd daily ride"
+   *
+   * @param  {[String]} str Entire String of post
+   * @return {[String]}     Ride type display string
+   */
   getRideType(str) {
     let tokens = this._TextManipulator.tokenizeToLowerCase(str);
     let resultRideType = null;
@@ -214,6 +235,7 @@ module.exports = class TitleConstructor {
         }
       }
     }
+
     if (resultRideType !== null) {
       return resultRideType;
     } else if (this._TextManipulator.strArrContains(tokens, RIDE_TYPES.keyword_singular) ||
@@ -228,26 +250,6 @@ module.exports = class TitleConstructor {
     }
   }
 
-  getUserAction(str) {
-    let userActions = [null, null];
-
-    if (this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.take_one_ride)) {
-      userActions[0] = "Take 1 ride &";
-    }
-
-    let payWith = this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.pay_with);
-    let card = this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.credit_cards);
-
-    if (payWith && card) {
-      userActions[1] = payWith + " " + card;
-    }
-
-    return userActions;
-  }
-
-  //=================================================
-  // HELPER FUNCTIONS
-  //=================================================
   /**
    * Determines if token is valid or not, usually when that token
    * is in the dictionary of tokens that need to be ignored
@@ -277,8 +279,6 @@ module.exports = class TitleConstructor {
     let posOfKeyword = this.getPosOfKeyWord(contextTokens);
     let posOfRideTypeToken = contextTokens.indexOf(digitToken);
     let rideTypeTokenIsPresent = posOfRideTypeToken > -1;
-
-    // console.log("pos of ride type token", digitToken, posOfRideTypeToken);
 
     if (posOfRideTypeToken < posOfKeyword  && rideTypeTokenIsPresent) {
       // If a digit occurs before the word "ride", most likely correct
@@ -314,4 +314,153 @@ module.exports = class TitleConstructor {
     return posOfKeyword;
   }
 
+  //=================================================
+  // PROCESS USER ACTIONS
+  //=================================================
+  /**
+   * Extracts user action, e.g. "Take 1 ride"
+   *
+   * @param  {[String]} str Entire String of post
+   * @return {[Object]}     User Action object as defined:
+     {
+       "take_1_ride": "Take 1 ride &",
+       "pay_with": "Pay by GrabPay",
+     }
+   */
+  getUserAction(str) {
+    let userActions = {
+      "take_1_ride": null,
+      "pay_with": null,
+    };
+
+    if (this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.take_one_ride)) {
+      userActions["take_1_ride"] = "Take 1 ride &";
+    }
+
+    let payWith = this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.pay_with);
+    let card = this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.credit_cards);
+    if (payWith && card) {
+      userActions["pay_with"] = payWith + " " + card;
+    }
+
+    return userActions;
+  }
+
+  //=================================================
+  // PROCESS REDEMPTION CONDITIONS
+  //=================================================
+  /**
+   * Extracts number of redemptions field.
+   *
+   * Strategy: Find the word "limited" then extract the first
+   * occurring numeric after it.
+   *
+   * @param  {[type]} str [description]
+   * @return {[type]}     [description]
+   */
+  getRedemptions(str) {
+    if (this._TextManipulator.strMatchWordsArr(str, REDEMPTIONS.terms.limited)) {
+      let tokens = this._TextManipulator.tokenize(str);
+
+      let redemptionPhrase = {
+        quantifier: "limited redemptions",
+        userRestriction: null,
+      };
+
+      for (let i = 0; i < tokens.length; i++) {
+        if (REDEMPTIONS.terms.limited.indexOf(tokens[i]) > -1) {
+          // We've the terms 'limited' or 'Limited'
+          let posOfKeyword = tokens.indexOf(tokens[i]);
+          let lookFarPos = posOfKeyword + 5;
+
+          // Set the end position such that we don't exceed the dimension of the arr
+          let endPos = null;
+          if (tokens.length > lookFarPos) {
+            endPos = lookFarPos;
+          } else {
+            endPos = tokens.length;
+          }
+
+          // Remaining space to iterate through lookFarPos tokens
+          // after the keyword or till the end
+          for (let j = posOfKeyword + 1; j < endPos; j++) {
+            // Extract quantifiers, e.g. 10k, 10,000
+            let quantifier = this.strMatchRedemptionQuantifier(tokens[j]);
+            if (quantifier) {
+              redemptionPhrase.quantifier = this.strReplaceThousandsWithK(quantifier[0]) + " redemptions";
+            }
+
+            // Set restrictions, e.g. "1 per user per day"
+            redemptionPhrase.userRestriction = this.strMatchUserRestriction(str);
+          }
+        }
+      }
+      return redemptionPhrase;
+    } else {
+      // Keywords "limited" or "Limited" aren't found
+      return null;
+    }
+  }
+
+  /**
+   * Obtains String matches for number quantifiers like:
+   *  1k 2k 10k 20k
+   *  10K 30K
+   *  15,000
+   *  10000
+   *
+   * @param  {[String]} str Input String
+   * @return {[Array]}      Array of 1 element that contains the
+   *                        matched quantifier or null if not found
+   */
+  strMatchRedemptionQuantifier(str) {
+    let digitToken = str.match(/(([0-9]+)[kK])|([0-9]+[,][0-9]+)|([0-9]+)/g);
+    if (digitToken) {
+      let num = digitToken[0];
+      if (this._TextManipulator.strContainsOnlyDigits(num)) {
+        // We don't accept any other numeric like dates, promo quantity, price, percentage, etc.
+        if (num > 500 &&
+            !this._TextManipulator.strMatchWordsArr(num, REDEMPTIONS.ignore_terms.years)) {
+          return digitToken;
+        } else {
+          return null;
+        }
+      } else {
+        return digitToken; // 10k, 10K are accepted
+      }
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Replaces all ,000 at the back of thousands with 'K'
+   *
+   * @param  {[String]} token Input string to replace ,000
+   * @return {[String]}       String that has ,000 replaced
+   */
+  strReplaceThousandsWithK(token) {
+    return token.replace(/(000)\b|(,000)/g, "K");
+  }
+
+  /**
+   * Obtains String matches for user restrictions like:
+   * "1 per mobile user per day", "2 rides per day"
+   *
+   * @param  {[String]} str String (of the entire post)
+   * @return {[String]}     Result display string
+   */
+  strMatchUserRestriction(str) {
+    if (this._TextManipulator.strMatchWordsArr(str, REDEMPTIONS.terms.restriction_1_ride)) {
+      return "1x per user per day";
+    } else if (this._TextManipulator.strMatchWordsArr(str, REDEMPTIONS.terms.restriction_2_rides)) {
+      return "2x per user per day";
+    } else {
+      return null;
+    }
+  }
+
+  //=================================================
+  // HELPER FUNCTIONS
+  //=================================================
 }
