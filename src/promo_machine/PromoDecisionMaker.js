@@ -46,9 +46,13 @@ module.exports = class PromoDecisionMaker {
    */
   getPromosOnly(printAccReport, unclassifiedPosts) {
     let classifiedPosts = this.trainClassifier(printAccReport, unclassifiedPosts);
-    let testDataObjs = this._trainAndTestObj['test']; // TODO: Which should automatically be the unclassifiedPosts after training
-    let promos = [];
 
+    // Comment this out if assessing acc report and not working on actual
+    // FB posts. Then the above classifiedPosts will be used instead.
+    classifiedPosts = this.classify(this.composeFBPostPromos(unclassifiedPosts));
+    console.log(this.composeFBPostPromos(unclassifiedPosts))
+
+    let promos = [];
     for (let i = 0; i < classifiedPosts.length; i++) {
       if (this.isClassifedAsPromo(classifiedPosts[i])) {
         promos.push(classifiedPosts[i]);
@@ -108,6 +112,42 @@ module.exports = class PromoDecisionMaker {
   }
 
   /**
+   * Composes FB post objects to prepare the classification object for the
+   * BayesClassifier
+   *
+   * @param  {[Array]} FBposts
+   * {
+       message: 'FREE RIDES! Our elevated GiveGet ofe perk! Learn more: t.uber.com/givegetsg',
+       full_picture: 'https://scontent.xx.fbcdn.net/v/t1.0-9/p720x720/18056948_768276946668145_1173779969895618998_n.png?oh=8a19e78bf3ca4611dd85e6bdc969517c&oe=597A4798',
+       link: 'https://www.facebook.com/UberSingapore/photos/a.272297529599425.1073741828.271012636394581/768276946668145/?type=3',
+       id: '271012636394581_768276946668145',
+       attachments: [Object]
+     }
+   * @return {[Array]}         [{ originalMsg: 'aces b',
+   *                              normalizedStr: 'ace b',
+   *                              tokens: ['ace', 'b'],, ...]
+   */
+  composeFBPostPromos(FBposts) {
+    let composedDataObjs = [];
+    console.log(FBposts[0]);
+
+    for (let i = 0; i < FBposts.length; i++) {
+      let FBpost = FBposts[i].message;
+      if (FBpost) {
+        let normalizedTokens = FBposts[i].message.tokenizeAndStem(false);
+        composedDataObjs.push({
+          originalMsg: FBposts[i].message,
+          normalizedStr: this.stitchTokensIntoString({ tokens: normalizedTokens }),
+          tokens: normalizedTokens,
+          brand: FBposts[i].brand,
+        });
+      }
+    }
+
+    return composedDataObjs;
+  }
+
+  /**
    * Composes objects for classification into a full package containing
    * it's original and new labelled classification. Prepares the
    * classification object to be fed into the BayesClassifier.
@@ -155,6 +195,7 @@ module.exports = class PromoDecisionMaker {
     // Test on taxi test set of tokenized strings
     for (let i = 0; i < objsToClassify.length; i++) {
       classified.push({
+        brand: objsToClassify[i]['brand'],
         originalMsg: objsToClassify[i]['originalMsg'],
         normalizedStr: objsToClassify[i]['normalizedStr'],
         tokens: objsToClassify[i]['tokens'],
@@ -265,7 +306,8 @@ module.exports = class PromoDecisionMaker {
   }
 
   /**
-   * Generates promos from retrieved FB posts and sends to AirTable
+   * Stitches array of promo objects up and returns a list of each of their
+   * accumulatedStrs
    *
    * @param {[Array]} listOfTokenizedData Array of
    *          { originalMsg: 'a b', tokens: ['a', 'b'], label: 'not-promo' }
@@ -280,9 +322,9 @@ module.exports = class PromoDecisionMaker {
   }
 
   /**
-   * Generates promos from retrieved FB posts and sends to AirTable
+   * Stitches object of tokens up into a String and returns the string
    *
-   * @param {[Object]} tokenizedData { tokens: ['a', 'b'], label: 'not-promo' }
+   * @param {[Object]} tokenizedData { originalMsg: 'a b', tokens: ['a', 'b'], label: 'not-promo' }
    * @return {[String]} 'a b'
    */
   stitchTokensIntoString(tokenizedData) {

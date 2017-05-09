@@ -8,7 +8,7 @@ const FBPostsRetriever = require('./retriever/FBPostsRetriever.js');
 const PromoMachine = require('./promo_machine/PromoMachine.js');
 
 // Import databases
-const Brands = require('./references/lookup/brands.js');
+const BRANDS = require('./references/lookup/brands.js');
 
 // Import constants
 const constants = require('./lib/constants.js');
@@ -40,21 +40,22 @@ module.exports = class BotHub {
     // ======================================
     // ALL MAIN FUNCTIONS OF BotLobangMaster
     // ======================================
-    // this._FBPostsRetriever.getListOfNodes(
-    //   constants.FB_QUERY_OPTIONS,
-    //   ["koithesg"],
-    //   constants.FB_QUERY_PARAMS_URL,
-    //   function(posts) {
-    //     console.log("========================================");
-    //     console.log("GET LIST OF POSTS FROM ALL BRANDS:");
-    //     console.log(posts['koithesg'][0]);
-    //     console.log("========================================");
-    //   }
-    // );
+    this._FBPostsRetriever.getListOfNodes(
+      constants.FB_QUERY_OPTIONS,
+      [BRANDS.brands.Taxi.uber, BRANDS.brands.Taxi.grab, BRANDS.brands.Taxi.comfort],
+      constants.FB_QUERY_PARAMS_URL,
+      (posts) => {
+        // console.log("========================================");
+        // console.log("GET LIST OF POSTS FROM ALL BRANDS:");
+        // console.log(posts['UberSingapore'][0]);
+        // console.log(posts['Grab'][0]);
+        // console.log(posts['ComfortDelGroTaxi'][0]);
+        // console.log("========================================");
 
-    // Generate promos from the retrieved promos
-    // TODO: Empty list first because we are working with fixtures
-    this._PromoMachine.generatePromos([]);
+        let listOfPromos = posts['UberSingapore'].concat(posts['Grab']).concat(posts['ComfortDelGroTaxi']);
+        this._PromoMachine.generatePromos(listOfPromos);
+      }
+    );
 
     // ======================================
     // SPIN UP THE SERVER
