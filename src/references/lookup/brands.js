@@ -14,6 +14,11 @@
 
 module.exports = {
 	brands: {
+		"Taxi": {
+			"uber": "UberSingapore",
+			"grab": "Grab",
+			"comfort": "ComfortDelGroTaxi",
+		},
 		"F_&_B": {
 			"category": {
 				"restaurants" : {
