@@ -4,10 +4,8 @@ let momentTimezone = require('moment-timezone');
 
 let TextManipulator = require('./../lib/TextManipulator.js');
 
-// Import database of taxi flagship products
-const TAXI_PRODUCTS = require('./../references/lookup/taxi_product_names.js');
-
-// Import database of
+// Import database dictionary
+const TAXI_PRODUCTS = require('./../references/lookup/keywords/title/taxi_products.js');
 const PROMO_CODES = require('./../references/lookup/keywords/title/promo_code.js');
 const RIDE_TYPES = require('./../references/lookup/keywords/title/ride_types.js');
 const USER_ACTION_TYPES = require('./../references/lookup/keywords/title/user_actions.js');
@@ -20,18 +18,6 @@ const REDEMPTIONS = require('./../references/lookup/keywords/title/redemptions.j
 module.exports = class TitleConstructor {
   constructor() {
     this._TextManipulator = new TextManipulator();
-
-    this._maxChars = 80;
-
-    // For my own reference
-    this._titleFields = {
-      user_type: "", // E.g. "Take 1 ride [& get]", "1st-Time users", "DBS/POSB/OCBC/GrabPay users"
-      brand: "", // E.g. Uber, Grab, Comfort
-      product: "", // E.g. UberPOOL, GrabSHARE
-      amount: "", // E.g. X% OFF, $X OFF
-      ride_type: "", // E.g. "weekend rides", "rides to and from CBD", "2nd daily ride", "2 rides"
-      promo_code: "", // E.g. "7POOL", "WKNDRIDER"
-    }
   }
 
   /**
@@ -86,7 +72,7 @@ module.exports = class TitleConstructor {
    * @return {Array} Flagship product names (non-normalized) OR null if not found
    */
   getProduct(str) {
-    let productNames = TAXI_PRODUCTS['taxi_product_names']['ALL'];
+    let productNames = TAXI_PRODUCTS['terms']['UBER'].concat(TAXI_PRODUCTS['terms']['GRAB']).concat(TAXI_PRODUCTS['terms']['COMFORT']);
     let tokens = this._TextManipulator.tokenize(str);
 
     let extractedProductNames = [];
@@ -195,14 +181,12 @@ module.exports = class TitleConstructor {
       start: null,
       end: null
     }
-    if (str.indexOf("till") == -1) {
-      let parsedDate = Sherlock.parse(str);
-      parsedDateResult.start = momentTimezone(new Date(parsedDate.startDate)).tz("Asia/Singapore").format();
-      parsedDateResult.end = momentTimezone(new Date(parsedDate.endDate)).tz("Asia/Singapore").format();
-      return parsedDateResult;
-    } else {
-      return null;
-    }
+
+    let parsedDate = Sherlock.parse(str);
+    parsedDateResult.start = momentTimezone(new Date(parsedDate.startDate)).tz("Asia/Singapore").format();
+    parsedDateResult.end = momentTimezone(new Date(parsedDate.endDate)).tz("Asia/Singapore").format();
+
+    return parsedDateResult;
   }
 
   //=================================================
