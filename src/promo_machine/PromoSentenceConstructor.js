@@ -136,8 +136,15 @@ module.exports = class PromoSentenceConstructor {
       }
 
       if (redemptions.quantifier) {
-        sentence += redemptions.quantifier + " only. ";
+        sentence += redemptions.quantifier + ". ";
       }
+    }
+
+    if (promo.user_type.pay_with) {
+      let payWithPhrase = promo.user_type.pay_with;
+      sentence += payWithPhrase.charAt(0).toUpperCase() +
+                  payWithPhrase.slice(1) +
+                  ".";
     }
 
     return sentence;
