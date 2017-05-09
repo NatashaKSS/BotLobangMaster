@@ -284,8 +284,8 @@ module.exports = class TitleConstructor {
         let candidateRideTypeTokens = this._TextManipulator.getSurroundingText(tokens, tokens.indexOf(token, i), 5);
         let candidateRideTypePhrase = this._TextManipulator.stitchStringTokens(candidateRideTypeTokens);
 
-        if (!this.getUserAction(candidateRideTypePhrase)) {
-          // If this phrase is not a user action, extract modifiers
+        if (!this.getUserAction(candidateRideTypePhrase)["take_1_ride"]) {
+          // If this phrase is not a user action that's related to "Take 1 ride", then extract modifiers
 
           for (let j = 0; j < candidateRideTypeTokens.length; j++) {
             let rideTypeToken = candidateRideTypeTokens[j];
@@ -434,7 +434,7 @@ module.exports = class TitleConstructor {
   /**
    * Extracts number of redemptions field.
    *
-   * Strategy: Find the word "limited" then extract the first
+   * Strategy: Find the word "" then extract the first
    * occurring numeric after it.
    *
    * @param  {[type]} str [description]
@@ -445,7 +445,7 @@ module.exports = class TitleConstructor {
       let tokens = this._TextManipulator.tokenize(str);
 
       let redemptionPhrase = {
-        quantifier: "limited redemptions",
+        quantifier: "Limited redemptions",
         userRestriction: null,
       };
 
