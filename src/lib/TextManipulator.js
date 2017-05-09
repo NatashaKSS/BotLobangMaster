@@ -14,7 +14,7 @@ module.exports = class TextManipulator {
    * @return {[Array]}      Array of Strings
    */
   tokenize(str) {
-    return str.split(/[ .,!?]+/g);
+    return str.split(/[ .!?]+/g);
   }
 
   /**
@@ -55,7 +55,7 @@ module.exports = class TextManipulator {
   }
 
   //=================================================
-  // REGEX MATCH STRING FUNCTIONS
+  // REGEX CONTAINS STRING FUNCTIONS
   //=================================================
   /**
    * Checks if a string contains a given regex pattern
