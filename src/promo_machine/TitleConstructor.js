@@ -4,8 +4,7 @@ let TextManipulator = require('./../lib/TextManipulator.js');
 const TAXI_PRODUCTS = require('./../references/lookup/taxi_product_names.js');
 
 // Import database of
-const PROMO_CODE_IGNORE_TERMS = require('./../references/lookup/ignore_terms/title/promo_code_ig_terms.js');
-const RIDE_TYPE_IGNORE_TERMS = require('./../references/lookup/ignore_terms/title/ride_types.js');
+const PROMO_CODES = require('./../references/lookup/keywords/title/promo_code.js');
 const RIDE_TYPES = require('./../references/lookup/keywords/title/ride_types.js');
 const USER_ACTION_TYPES = require('./../references/lookup/keywords/title/user_actions.js');
 const REDEMPTIONS = require('./../references/lookup/keywords/title/redemptions.js');
@@ -47,6 +46,7 @@ module.exports = class TitleConstructor {
       user_type: "",
       brand: "",
       product: "",
+      date: "",
       'amount_$': [],
       'amount_%': [],
       ride_type: "",
@@ -57,6 +57,7 @@ module.exports = class TitleConstructor {
     titleFields['user_type'] = this.getUserAction(promoText);
     titleFields['brand'] = "";
     titleFields['product'] = this.getProduct(promoText);
+    titleFields['date'] = this.getDate(promoText);
     titleFields['amount_$'] = this.getPrice(promoText);
     titleFields['amount_%'] = this.getPercentage(promoText);
     titleFields['ride_type'] = this.getRideType(promoText);
@@ -105,6 +106,13 @@ module.exports = class TitleConstructor {
     } else {
       return extractedProductNames;
     }
+  }
+
+  //=================================================
+  // PROCESS DATES
+  //=================================================
+  getDate(str) {
+    return "10 June 2017"
   }
 
   //=================================================
@@ -164,7 +172,7 @@ module.exports = class TitleConstructor {
             !this._TextManipulator.strContainsTime(token) &&
             !this._TextManipulator.strContainsNumberRange(token) &&
             this._TextManipulator.containsAtLeast4Digits(token) &&
-            !this._TextManipulator.strArrContains(PROMO_CODE_IGNORE_TERMS['promo_code_ig_terms'], token)) {
+            !this._TextManipulator.strArrContains(PROMO_CODES.ignore_terms.general, token)) {
           // Duplicates will not be tolerated in our extracted list
           if (token.length > 0) {
             extractedPromoCodes.push(token); // Save original token (no lowercase)
@@ -259,8 +267,8 @@ module.exports = class TitleConstructor {
    */
   tokenIsValid(token) {
     let result =
-      !this._TextManipulator.strArrContains(RIDE_TYPE_IGNORE_TERMS.year, token) &&
-      !this._TextManipulator.strArrContains(RIDE_TYPE_IGNORE_TERMS.redemptions, token);
+      !this._TextManipulator.strArrContains(RIDE_TYPES.ignore_terms.year, token) &&
+      !this._TextManipulator.strArrContains(RIDE_TYPES.ignore_terms.redemptions, token);
     return result;
   }
 

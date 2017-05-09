@@ -15,5 +15,9 @@ module.exports = {
     "first_two": ["first 2", "first two"],
     "same_day": ["same day"],
     "flat_fare": ["flat-fare"],
+  },
+  ignore_terms: {
+    "year": ["2016", "2017", "2018", "2019", "2020"],
+    "redemptions": ["2000", "3000", "5000", "00", "000", "0000"],
   }
 }
