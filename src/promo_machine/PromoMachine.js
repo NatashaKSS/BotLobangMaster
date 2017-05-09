@@ -19,18 +19,13 @@ module.exports = class PromoMachine {
   /**
    * Generates promos from retrieved FB posts and sends to AirTable
    *
-   * @param {[Array]} posts Array of FB posts
+   * @param {[Array]} posts [<>]
    * @return {[Array]} Promos fit for FB chatbot
    */
   generatePromos(posts) {
-    // TODO: FORGOT TO PASS IN BRAND NAME
-    let listOfPromoObjs = this._promoDecisionMaker.getPromosOnly(false, []);
-
-    // this.printListOfPromoMsg(listOfPromoObjs);
+    let listOfPromoObjs = this._promoDecisionMaker.getPromosOnly(false, posts);
     let promos = this.decipherPromoObj(listOfPromoObjs);
     this._promoAirTableHandler.sendToAirTable("Taxi_FB", promos);
-
-    return [{}, {}, {}];
   }
 
   //==============================================================
@@ -44,17 +39,12 @@ module.exports = class PromoMachine {
       // We only count a promo with a promo code as a valid one
       if (extractedPromoObj["promo_code"]) {
         decipheredPromos.push({
+          brand: listOfPromoObjs[i]['brand'],
           promoObj: extractedPromoObj,
           title: this._promoSentenceConstructor.generateTaxiPromoTitle(extractedPromoObj),
           description: this._promoSentenceConstructor.generateTaxiPromoDescription(extractedPromoObj),
         });
       }
-      //console.log(i + 1, this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg']));
-      // if (extractedPromoObj["promo_code"]) {
-      //   console.log(this._promoSentenceConstructor.generateTaxiPromoTitle(extractedPromoObj));
-      //   console.log(this._promoSentenceConstructor.generateTaxiPromoDescription(extractedPromoObj));
-      //   console.log("===");
-      // }
     }
     return decipheredPromos;
   }
@@ -66,6 +56,7 @@ module.exports = class PromoMachine {
     for (let i = 0; i < listOfObjs.length; i++) {
       console.log("=================================");
       console.log(listOfObjs[i]['originalMsg']);
+      console.log(listOfObjs[i]['brand']);
     }
   }
 }

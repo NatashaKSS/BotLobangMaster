@@ -38,6 +38,24 @@ module.exports = class FBPostsRetriever {
         } else {
           result = res.data;
           console.log("POSTS from " + queryURL + " retrieved!!");
+
+          if (queryURL === "UberSingapore") {
+            result.map((FBpost) => {
+              FBpost.brand = "Uber";
+            })
+          } else if (queryURL === "Grab") {
+            result.map((FBpost) => {
+              FBpost.brand = "Grab";
+            })
+          } else if (queryURL === "ComfortDelGroTaxi") {
+            result.map((FBpost) => {
+              FBpost.brand = "CDG";
+            })
+          } else {
+            result.map((FBpost) => {
+              FBpost.brand = "NO BRAND"
+            })
+          }
           callback(result);
         }
       });
