@@ -112,10 +112,10 @@ module.exports = class TitleConstructor {
   getDate(str) {
     if (str.indexOf("till") > -1) {
       // Chrono handles dates without "till" better
-      return this.getChronoDate(str);
+      return this.addHours(this.getChronoDate(str), 8);
     } else {
       // Watson handles dates with ranges better
-      return this.getWatsonDate(str);
+      return this.addHours(this.getWatsonDate(str), 8);
     }
   }
 
@@ -144,12 +144,12 @@ module.exports = class TitleConstructor {
         let start = parsedDate[i].start;
         let end = parsedDate[i].end;
         if (start) {
-          parsedDateResult.start = momentTimezone(start.date()).tz("Asia/Singapore").format();
-          // console.log("Start: ", parsedDateResult.start.toString())
+          parsedDateResult.start = start.date();
+          // console.log("CHRONO START: ", start.date())
         }
         if (end) {
-          parsedDateResult.end = momentTimezone(end.date()).tz("Asia/Singapore").format();
-          // console.log("End:", parsedDateResult.end.toString());
+          parsedDateResult.end = end.date();
+          // console.log("CHRONO END:", end.date());
         } else {
           // Set end date to start date since promos can only have 1 end date
           parsedDateResult.end = parsedDateResult.start;
@@ -183,10 +183,30 @@ module.exports = class TitleConstructor {
     }
 
     let parsedDate = Sherlock.parse(str);
-    parsedDateResult.start = momentTimezone(new Date(parsedDate.startDate)).tz("Asia/Singapore").format();
-    parsedDateResult.end = momentTimezone(new Date(parsedDate.endDate)).tz("Asia/Singapore").format();
+    // parsedDateResult.start = momentTimezone(new Date(parsedDate.startDate)).tz("Asia/Singapore").format();
+    // parsedDateResult.end = momentTimezone(new Date(parsedDate.endDate)).tz("Asia/Singapore").format();
+
+    parsedDateResult.start = new Date(parsedDate.startDate);
+    parsedDateResult.end = new Date(parsedDate.endDate);
+    // console.log("WATSON START", parsedDateResult.start);
+    // console.log("WATSON END", parsedDateResult.end);
 
     return parsedDateResult;
+  }
+
+  addHours(date, hours){
+    let startDate = date.start;
+    let endDate = date.end;
+
+    if (startDate) {
+      startDate.setHours(startDate.getHours() + hours)
+    }
+
+    if (endDate) {
+      endDate.setHours(endDate.getHours() + hours)
+    }
+
+    return date;
   }
 
   //=================================================

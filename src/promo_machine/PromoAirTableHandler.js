@@ -37,8 +37,8 @@ module.exports = class PromoAirTableHandler {
           ride_type: JSON.stringify(promo["ride_type"]),
           redemptions: JSON.stringify(promo["redemptions"]),
           user_type: JSON.stringify(promo["user_type"]),
-          "Start Date & Time": this.getValidDate(promo["date"]["Start Date & Time"]),
-          "End Date & Time": promo["date"]["End Date & Time"],
+          "Start Date & Time": this.getValidDate(promo["date"]["start"]),
+          "End Date & Time": this.getValidDate(promo["date"]["end"]),
         }, (err, record) => {
           if (!err) {
             // No errors
@@ -98,9 +98,17 @@ module.exports = class PromoAirTableHandler {
   //===========================================
   // HELPER FUNCTIONS
   //===========================================
+  /**
+   * Obtains the valid date in Asia/Singapore timezone in JS Date objetc format
+   *
+   * @param  {[Date]} date  JS Date object already in SG timezone
+   * @return {[Date]}       Today's current date/time in SG timezone
+   */
   getValidDate(date) {
     if (!date) {
-      return momentTimezone(new Date()).tz("Asia/Singapore").format();
+      let currDate = new Date();
+      currDate.setHours(currDate.getHours() + 8); // Singapore time
+      return currDate;
     } else {
       return date;
     }
