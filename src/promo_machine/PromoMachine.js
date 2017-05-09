@@ -2,6 +2,8 @@
 const _ = require('underscore');
 const PromoDecisionMaker = require('./PromoDecisionMaker.js');
 const TitleConstructor = require('./TitleConstructor.js');
+const PromoSentenceConstructor = require('./PromoSentenceConstructor.js');
+const PromoAirTableHandler = require('./../promo_machine/PromoAirTableHandler.js');
 
 /**
  * Generates valid promos in specified formats fit for pushing to the chatbot
@@ -10,18 +12,8 @@ module.exports = class PromoMachine {
   constructor() {
     this._promoDecisionMaker = new PromoDecisionMaker();
     this._titleConstructor = new TitleConstructor();
-
-    this._promos = [];
-    /*
-    {
-      title: "",
-      description: "",
-      img_url: "",
-      link_url: "",
-      start_date: "",
-      end_date: "",
-    }
-     */
+    this._promoSentenceConstructor = new PromoSentenceConstructor();
+    this._promoAirTableHandler = new PromoAirTableHandler();
   }
 
   /**
@@ -35,7 +27,8 @@ module.exports = class PromoMachine {
     let listOfPromoObjs = this._promoDecisionMaker.getPromosOnly(false, []);
 
     // this.printListOfPromoMsg(listOfPromoObjs);
-    this.generateTitles(listOfPromoObjs);
+    let promos = this.decipherPromoObj(listOfPromoObjs);
+    this._promoAirTableHandler.sendToAirTable("Taxi_FB", promos);
 
     return [{}, {}, {}];
   }
@@ -43,11 +36,27 @@ module.exports = class PromoMachine {
   //==============================================================
   // GENERATE TITLES
   //==============================================================
-  generateTitles(listOfPromoObjs) {
+  decipherPromoObj(listOfPromoObjs) {
+    let decipheredPromos = [];
     for (let i = 0; i < listOfPromoObjs.length; i++) {
-      console.log(i + 1, this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg']));
-      console.log("---")
+      let extractedPromoObj = this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg']);
+
+      // We only count a promo with a promo code as a valid one
+      if (extractedPromoObj["promo_code"]) {
+        decipheredPromos.push({
+          promoObj: extractedPromoObj,
+          title: this._promoSentenceConstructor.generateTaxiPromoTitle(extractedPromoObj),
+          description: this._promoSentenceConstructor.generateTaxiPromoDescription(extractedPromoObj),
+        });
+      }
+      //console.log(i + 1, this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg']));
+      // if (extractedPromoObj["promo_code"]) {
+      //   console.log(this._promoSentenceConstructor.generateTaxiPromoTitle(extractedPromoObj));
+      //   console.log(this._promoSentenceConstructor.generateTaxiPromoDescription(extractedPromoObj));
+      //   console.log("===");
+      // }
     }
+    return decipheredPromos;
   }
 
   //==============================================================
