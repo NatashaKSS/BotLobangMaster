@@ -275,7 +275,7 @@ module.exports = class TitleConstructor {
             !this._TextManipulator.strContainsPunctuation(token) &&
             !this._TextManipulator.strContainsTime(token) &&
             !this._TextManipulator.strContainsNumberRange(token) &&
-            this._TextManipulator.containsAtLeast4Digits(token) &&
+            this._TextManipulator.containsAtLeast3Digits(token) &&
             !this._TextManipulator.strArrContains(PROMO_CODES.ignore_terms.general, token)) {
           // Duplicates will not be tolerated in our extracted list
           if (token.length > 0) {
