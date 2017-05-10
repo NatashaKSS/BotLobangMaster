@@ -150,15 +150,15 @@ module.exports = class TextManipulator {
 
   /**
    * For strings that contain ONLY digits, check if it has at
-   * least 4 digits.
+   * least 3 digits.
    *
    * @param  {[String]} str   Input string to check
-   * @return {[Boolean]}      True if str has digits only and has at least 4,
+   * @return {[Boolean]}      True if str has digits only and has at least 3,
    *                          false otherwise
    */
-  containsAtLeast4Digits(str) {
+  containsAtLeast3Digits(str) {
     if (this.strContainsOnlyDigits(str)) {
-      return this.strContains(str, /[0-9]{4,}/g);
+      return this.strContains(str, /[0-9]{3,}/g);
     } else {
       // All letters or mix of digits/letters they're still valid
       return true;
