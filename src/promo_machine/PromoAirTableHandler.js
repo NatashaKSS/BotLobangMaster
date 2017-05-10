@@ -16,40 +16,42 @@ module.exports = class PromoAirTableHandler {
     let allAirTablePromos = promos;
 
     this.getUniquePromos(promos, table, (uniquePromos) => {
-      allAirTablePromos = uniquePromos;
+      this.getUniquePromos(uniquePromos, "Taxi_FB_ignores", (uniquePromos) => {
+        allAirTablePromos = uniquePromos;
 
-      // allAirTablePromos should not contain duplicates at this point
-      for(var i = 0; i < allAirTablePromos.length; i++) {
-        let promo = allAirTablePromos[i].promoObj;
-        let title = allAirTablePromos[i].title;
-        let description = allAirTablePromos[i].description;
+        // allAirTablePromos should not contain duplicates at this point
+        for(var i = 0; i < allAirTablePromos.length; i++) {
+          let promo = allAirTablePromos[i].promoObj;
+          let title = allAirTablePromos[i].title;
+          let description = allAirTablePromos[i].description;
 
-        this._base(table).create({
-          promo_code_ID: promo.promo_code[0],
-          promo_codes: JSON.stringify(promo.promo_code),
-          title: title,
-          description: description,
-          image: promos[i].image_url,
-          link_to: promos[i].link_to,
-          brand: promos[i].brand,
-          product: JSON.stringify(promo.product),
-          amount_$: JSON.stringify(promo["amount_$"]),
-          "amount_%": JSON.stringify(promo["amount_%"]),
-          ride_type: JSON.stringify(promo["ride_type"]),
-          redemptions: JSON.stringify(promo["redemptions"]),
-          user_type: JSON.stringify(promo["user_type"]),
-          "Start Date & Time": this.getValidDate(promo["date"]["start"]),
-          "End Date & Time": this.getValidDate(promo["date"]["end"]),
-        }, (err, record) => {
-          if (!err) {
-            // No errors
-          } else {
-            // Return debug message with first 30 chars of post title
-            console.log("ERROR IN", record);
-          }
-        });
-      }
-      console.log("DONE WITH SENDING TO AIRTABLE. PLEASE CHECK AIRTABLE.");
+          this._base(table).create({
+            promo_code_ID: promo.promo_code[0],
+            promo_codes: JSON.stringify(promo.promo_code),
+            title: title,
+            description: description,
+            image: promos[i].image_url,
+            link_to: promos[i].link_to,
+            brand: promos[i].brand,
+            product: JSON.stringify(promo.product),
+            amount_$: JSON.stringify(promo["amount_$"]),
+            "amount_%": JSON.stringify(promo["amount_%"]),
+            ride_type: JSON.stringify(promo["ride_type"]),
+            redemptions: JSON.stringify(promo["redemptions"]),
+            user_type: JSON.stringify(promo["user_type"]),
+            "Start Date & Time": this.getValidDate(promo["date"]["start"]),
+            "End Date & Time": this.getValidDate(promo["date"]["end"]),
+          }, (err, record) => {
+            if (!err) {
+              // No errors
+            } else {
+              // Return debug message with first 30 chars of post title
+              console.log("ERROR IN", record);
+            }
+          });
+        }
+        console.log("DONE WITH SENDING TO AIRTABLE. PLEASE CHECK AIRTABLE.");
+      });
     });
   }
 
