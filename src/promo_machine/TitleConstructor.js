@@ -539,7 +539,7 @@ module.exports = class TitleConstructor {
       if (this._TextManipulator.strContainsOnlyDigits(num)) {
         // We don't accept any other numeric like dates, promo quantity, price, percentage, etc.
         if (num > 500 &&
-            !this._TextManipulator.strMatchWordsArr(num, REDEMPTIONS.ignore_terms.years)) {
+            !this._TextManipulator.strMatchWordsArr(num, REDEMPTIONS.ignore_terms.numbers)) {
           return digitToken;
         } else {
           return null;
