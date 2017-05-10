@@ -130,15 +130,19 @@ module.exports = class PromoDecisionMaker {
     let composedDataObjs = [];
 
     for (let i = 0; i < FBposts.length; i++) {
-      let FBpost = FBposts[i].message;
-      if (FBpost) {
+      if (FBposts[i].message) {
+        let composedDataObj = {};
+        for (let key in FBposts[i]) {
+          composedDataObj[key] = FBposts[i][key];
+        }
+
         let normalizedTokens = FBposts[i].message.tokenizeAndStem(false);
-        composedDataObjs.push({
-          originalMsg: FBposts[i].message,
-          normalizedStr: this.stitchTokensIntoString({ tokens: normalizedTokens }),
-          tokens: normalizedTokens,
-          brand: FBposts[i].brand,
-        });
+
+        composedDataObj.originalMsg = FBposts[i].message;
+        composedDataObj.normalizedStr = this.stitchTokensIntoString({ tokens: normalizedTokens });
+        composedDataObj.tokens = normalizedTokens;
+
+        composedDataObjs.push(composedDataObj);
       }
     }
 
@@ -188,19 +192,23 @@ module.exports = class PromoDecisionMaker {
    *                               { "label": "promo", "value": 1.02002e-9 }] }]
    */
   classify(objsToClassify) {
-    let classified = [];
+    let classifiedPosts = [];
 
     // Test on taxi test set of tokenized strings
     for (let i = 0; i < objsToClassify.length; i++) {
-      classified.push({
-        brand: objsToClassify[i]['brand'],
-        originalMsg: objsToClassify[i]['originalMsg'],
-        normalizedStr: objsToClassify[i]['normalizedStr'],
-        tokens: objsToClassify[i]['tokens'],
-        labels: this._bayes.classifyPostMsg(objsToClassify[i]['normalizedStr'])
-      });
+      let classified = {};
+      for (let key in objsToClassify[i]) {
+        classified[key] = objsToClassify[i][key];
+      }
+
+      classified.originalMsg = objsToClassify[i]['originalMsg'];
+      classified.normalizedStr = objsToClassify[i]['normalizedStr'];
+      classified.tokens = objsToClassify[i]['tokens'];
+      classified.labels = this._bayes.classifyPostMsg(objsToClassify[i]['normalizedStr']);
+
+      classifiedPosts.push(classified);
     }
-    return classified;
+    return classifiedPosts;
   }
 
   //==============================================================
