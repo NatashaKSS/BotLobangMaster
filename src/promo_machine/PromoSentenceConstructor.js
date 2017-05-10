@@ -111,7 +111,7 @@ module.exports = class PromoSentenceConstructor {
   //=====================================================
   /*
   {
-    user_type: { take_1_ride: null, pay_with: null },
+    user_type: { take_1_ride: null, pay_with: null, validity_range: "11am-3pm" },
     brand: 'Uber',
     product: [ 'uberPOOL' ],
     date:
@@ -128,6 +128,11 @@ module.exports = class PromoSentenceConstructor {
   */
   generateTaxiPromoDescription(promo) {
     let sentence = ""
+
+    let validityRange = promo.user_type.validity_range;
+    if (validityRange) {
+      sentence += validityRange.trim().replace(/( - )/g, "-").toUpperCase() + ". "
+    }
 
     let redemptions = promo.redemptions;
     if (redemptions) {

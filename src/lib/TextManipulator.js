@@ -118,6 +118,17 @@ module.exports = class TextManipulator {
   }
 
   /**
+   * Matches a string to a time range format,
+   * e.g. 5am-10am, 5am - 10am, 5AM-10AM, 5AM - 10AM, 5.15am-10.00am
+   *
+   * @param  {[String]} str   Input string to check
+   * @return {[Array]}        Array of matched Strings, null if none found
+   */
+  strMatchTimeRange(str) {
+    return str.match(/(\d{0,2}|\d{0,2}.\d{2})(am|AM|pm|PM)(( - )|-)(\d{0,2}|\d{0,2}.\d{2})(am|AM|pm|PM)/g);
+  }
+
+  /**
    * Checks if a string contains a number range, e.g. 23-31, 234-88911
    *
    * @param  {[String]} str   Input string to check

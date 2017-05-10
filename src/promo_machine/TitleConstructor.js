@@ -311,6 +311,7 @@ module.exports = class TitleConstructor {
       // Deal with contextual tokens around keywords like "ride(s)"
       if (token === RIDE_TYPES.keyword_singular || token === RIDE_TYPES.keyword_plural ||
           token === RIDE_TYPES.keyword_singular_cdg || token === RIDE_TYPES.keyword_plural_cdg) {
+
         let candidateRideTypeTokens = this._TextManipulator.getSurroundingText(tokens, tokens.indexOf(token, i), 5);
         let candidateRideTypePhrase = this._TextManipulator.stitchStringTokens(candidateRideTypeTokens);
 
@@ -443,6 +444,7 @@ module.exports = class TitleConstructor {
     let userActions = {
       "take_1_ride": null,
       "pay_with": null,
+      "validity_range": null,
     };
 
     if (this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.take_one_ride)) {
@@ -453,6 +455,11 @@ module.exports = class TitleConstructor {
     let card = this._TextManipulator.strMatchWordsArr(str, USER_ACTION_TYPES.terms.credit_cards);
     if (payWith && card) {
       userActions["pay_with"] = payWith + " " + card;
+    }
+
+    let validityRange = this._TextManipulator.strMatchTimeRange(str);
+    if (validityRange) {
+      userActions["validity_range"] = this._TextManipulator.strMatchTimeRange(str)[0];
     }
 
     return userActions;
