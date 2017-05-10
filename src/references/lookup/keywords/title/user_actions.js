@@ -9,7 +9,7 @@ module.exports = {
     "pay_with": ["pay with", "pay by", "pay via", "use", "using"],
     "credit_cards": [
       "Grabpay", "GrabPay",
-      "DBS", "POSB", "OCBC",
+      "DBS", "POSB", "OCBC", "Mastercard", "Masterpass",
       "ApplePay", "ApplePAY", "Applepay",
       "AndroidPay", "AndroidPAY", "Androidpay",
       "card", "your card"
