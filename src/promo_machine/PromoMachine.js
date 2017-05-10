@@ -34,7 +34,8 @@ module.exports = class PromoMachine {
   decipherPromoObjs(listOfPromoObjs) {
     let decipheredPromos = [];
     for (let i = 0; i < listOfPromoObjs.length; i++) {
-      let extractedPromoObj = this._titleConstructor.getTitle(listOfPromoObjs[i]['originalMsg'], listOfPromoObjs[i]['brand']);
+      let originalPromoObj = listOfPromoObjs[i];
+      let extractedPromoObj = this._titleConstructor.getTitle(originalPromoObj);
 
       // We only count a promo with a promo code as a valid one
       if (extractedPromoObj["promo_code"]) {
@@ -43,6 +44,8 @@ module.exports = class PromoMachine {
           promoObj: extractedPromoObj,
           title: this._promoSentenceConstructor.generateTaxiPromoTitle(extractedPromoObj),
           description: this._promoSentenceConstructor.generateTaxiPromoDescription(extractedPromoObj),
+          image_url: originalPromoObj['full_picture'],
+          link_to: originalPromoObj['link'],
         });
       }
     }

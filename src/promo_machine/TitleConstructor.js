@@ -22,16 +22,16 @@ module.exports = class TitleConstructor {
 
   /**
    * Best-effort extracts elements of a piece of text that most fits the
-   * 'title' category and returns:
-   * {
+   * 'title' category and returns an Object representing the promo with
+   * extracted fields
    *
-   * }
-   *
-   * @param {String} promoText Message text of the promo
-   * @param {String} brand Brand who posted the promo
-   * @return {String} Title of this promo
+   * @param {Object} promoObj Promo obj
+   * @return {Object} Fields of this promo
    */
-  getTitle(promoText, brand) {
+  getTitle(promoObj) {
+    let promoText = promoObj.originalMsg;
+    let brand = promoObj.brand;
+
     let titleFields = {
       user_type: "",
       brand: "",
