@@ -9,7 +9,7 @@ module.exports = class PromoSentenceConstructor {
     /*
     {
       user_type: { take_1_ride: null, pay_with: null },
-      brand: '',
+      brand: 'Uber',
       product: [ 'uberPOOL' ],
       date:
         {
@@ -33,11 +33,11 @@ module.exports = class PromoSentenceConstructor {
     let sentence = "";
 
     if (promo.product) {
-      sentence += this.generateProduct(promo) + " ";
+      sentence += this.generateProduct(promo) + ": ";
     } else {
       // If no product specific is found, use brand name instead
       if (promo.brand) {
-        sentence += promo.brand;
+        sentence += promo.brand + ": ";
       }
     }
 
@@ -63,7 +63,7 @@ module.exports = class PromoSentenceConstructor {
     let sentence = "";
     for (let i = 0; i < promo.product.length; i++) {
       if (i === promo.product.length - 1) { // The last product name
-        sentence += promo.product[i] + ":";
+        sentence += promo.product[i];
       } else {
         sentence += promo.product[i] + " & ";
       }
@@ -112,7 +112,7 @@ module.exports = class PromoSentenceConstructor {
   /*
   {
     user_type: { take_1_ride: null, pay_with: null },
-    brand: '',
+    brand: 'Uber',
     product: [ 'uberPOOL' ],
     date:
       {

@@ -49,7 +49,7 @@ module.exports = class FBPostsRetriever {
             })
           } else if (queryURL === "ComfortDelGroTaxi") {
             result.map((FBpost) => {
-              FBpost.brand = "CDG";
+              FBpost.brand = "Comfort";
             })
           } else {
             result.map((FBpost) => {
