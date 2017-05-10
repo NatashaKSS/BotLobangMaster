@@ -1,0 +1,34 @@
+/**
+* Trained with Bubble tea, Fast Food, Yoghurt, Coffee, Taxi
+**
+
+==============GOT THIS WRONG=============
+Original Text: "Free Cone Day is coming April 4th! So close you can almost taste the FREE ice cream. How far would you go for free ice cream? Tell us in the comments!"
+Normalized Tokens: ["free","cone","dai","come","april","4th","close","almost","tast","free","ic","cream","far","go","free","ic","cream","tell","us","comment"]
+Was supposed to be promo, but instead got not-promo
+{"promo":3.714845938841697e-17,"not-promo":1.4071992947996317e-15}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "*NEW* It's vanilla, but not as you know it. Immerse yourself in the caramel-gooeyness and delicious swirls of fudge in our Vanilla Caramel Fudge. Try our new flavour and keep your favourites happy with our Buy 2 Get 1 Free* offer. Available in Fairprice, Sheng Siong and Cheers only. *Promo period: 2 – 15 Mar. Excludes Ben & Jerry’s Core range."
+Normalized Tokens: ["new","vanilla","not","know","immers","caramel","gooey","delici","swirl","fudg","vanilla","caramel","fudg","try","new","flavour","keep","favourit","happi","bui","free","offer","avail","fairpric","sheng","siong","cheer","promo","period","15","mar","exclud","ben","jerri","core","rang"]
+Was supposed to be promo, but instead got not-promo
+{"promo":1.987826513402438e-30,"not-promo":2.023313660879691e-30}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "No tricks, just treats at Cold Stone Creamery. Graveyard is a deadly combination of Sweet Cream ice cream mixed with Raspberries, Gummy Worms and Brains, and topped with OREO crumbs. Try it with our seasonal Blood Red Velvet Waffles at only $13 nett! Available from tomorrow onwards!"
+Normalized Tokens: ["no","trick","just","treat","cold","stone","creameri","graveyard","deadli","combin","sweet","cream","ic","cream","mix","raspberri","gummi","worm","brain","top","oreo","crumb","try","season","blood","red","velvet","waffl","13","nett","avail","tomorrow","onward"]
+Was supposed to be promo, but instead got not-promo
+{"promo":4.728192077927876e-35,"not-promo":1.1472654412162739e-33}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "These cuties from STORKS movie are at Cold Stone VivoCity all the way till 12pm! Come say hello ?? #STORKSxCSC #Coldstonesg #cscsg "
+Normalized Tokens: ["cuti","stork","movi","cold","stone","vivoc","till","12pm","sai","hello","storksxcsc","coldstonesg","cscsg"]
+Was supposed to be not-promo, but instead got promo
+{"promo":3.8801507893113575e-8,"not-promo":8.328162845481743e-9}
+=========================================
+================SUMMARY================
+You got 12/16 correct
+Accuracy is 0.75
+Misclassification rate is 0.25
+Number of false positives is 1 out of 4 misclassified.
+=============END OF SUMMARY============

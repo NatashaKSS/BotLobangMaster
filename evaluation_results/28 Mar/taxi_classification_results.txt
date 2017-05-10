@@ -1,0 +1,54 @@
+==============GOT THIS WRONG=============
+Original Text: "#TBT: Looking back at our International Women’s Day celebration with our amazing community of women driver partners. Thank you for juggling all that you do, and still finding the time to keep Singapore moving! The Uber family is humbled by your passion, strength and stories. #sUBERwomen "
+Normalized Tokens: ["tbt","look","back","intern","women","dai","celebr","amaz","commun","women","driver","partner","thank","juggl","find","time","keep","singapor","move","uber","famili","humbl","passion","strength","stori","suberwomen"]
+Was supposed to be not-promo, but instead got promo
+{"promo":7.672969803222219e-25,"not-promo":8.382987521998472e-26}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "#UberPopQuiz answer revealed! Your fare from the airport can be less than $10 if your destination is close by, and if not, it's $10 to anywhere in the city! Our lucky rider Rennie just won $50 in Uber credits for having the right answer. Congratulations! Want to be next? Stay tuned for our next #UberPopQuiz!"
+Normalized Tokens: ["uberpopquiz","answer","reveal","fare","airport","less","10","destin","close","not","10","anywher","citi","lucki","rider","renni","just","won","50","uber","credit","have","right","answer","congratul","want","next","stai","tune","next","uberpopquiz"]
+Was supposed to be not-promo, but instead got promo
+{"promo":1.5047158812591933e-21,"not-promo":2.6111618001600255e-22}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Calling all Manchester United fans— you can watch exclusive behind-the-scenes interviews with the team! Simply open up the Uber app, swipe up on the Manchester United card and tap 'Get Access' to enjoy exclusive content on your next ride. ubr.to/manunited "
+Normalized Tokens: ["call","manchest","unit","fan","watch","exclus","behind","scene","interview","team","simpli","open","uber","app","swipe","manchest","unit","card","tap","access","enjoi","exclus","content","next","ride","ubr","manunit"]
+Was supposed to be not-promo, but instead got promo
+{"promo":1.4119764797074817e-18,"not-promo":1.3506086049861916e-20}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Faster, secure and with cost savings to boot. Find out how our in-app messaging feature GrabChat has changed the way we communicate when we ride. grb.to/chatting "
+Normalized Tokens: ["faster","secur","cost","save","boot","find","app","messag","featur","grabchat","chang","commun","ride","grb","chat"]
+Was supposed to be not-promo, but instead got promo
+{"promo":7.742652536750194e-9,"not-promo":4.056746559688759e-9}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Myth #1: You can't claim insurance in an accident. Did you know that Grab offers an extra layer of free insurance above what's required by Singapore law? (Yup, we said free).  Read on to know more: http://grb.to/ridehail-myth"
+Normalized Tokens: ["myth","claim","insur","accid","know","grab","offer","extra","layer","free","insur","requir","singapor","law","yup","free","read","know","http","grb","ridehail","myth"]
+Was supposed to be not-promo, but instead got promo
+{"promo":6.056829278344715e-13,"not-promo":2.707919304113044e-13}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Psst, GrabShare is up to 30% cheaper than GrabCar! How would you spend the money saved from taking a GrabShare? We'd definitely spend it on coffee lah! ? #BallinWithGrab"
+Normalized Tokens: ["psst","grabshar","30","cheaper","grabcar","spend","monei","save","take","grabshar","definit","spend","coffe","lah","ballinwithgrab"]
+Was supposed to be not-promo, but instead got promo
+{"promo":6.658681181605173e-7,"not-promo":1.149411525245149e-7}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Ever find yourself deliberately walking into a supermarket at night just to raid the last-minute offers? As university students, we've all had instances where we'd go to great lengths just to stretch a dollar. With GrabShare, you won't need to as prices are up to 30% less than GrabCar's. Find out what some of our GrabShare users have to say! #BallinWithGrab "
+Normalized Tokens: ["ever","find","deliber","walk","supermarket","night","just","raid","last","minut","offer","univers","student","ve","instanc","go","great","length","just","stretch","dollar","grabshar","won","need","price","30","less","grabcar","find","grabshar","user","sai","ballinwithgrab"]
+Was supposed to be not-promo, but instead got promo
+{"promo":1.5694710961136464e-23,"not-promo":3.3117975395549887e-25}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "We thank all who showed up with their ComfortDelGro app this evening at our roadshow. And for those who missed us tonight, don't worry. We are just warming up and you can drop by and catch us again tomorrow. "
+Normalized Tokens: ["thank","show","comfortdelgro","app","even","roadshow","miss","us","tonight","don","worri","just","warm","drop","catch","us","tomorrow"]
+Was supposed to be not-promo, but instead got promo
+{"promo":9.892336584704773e-19,"not-promo":8.289449639068691e-19}
+=========================================
+================SUMMARY================
+You got 38/46 correct
+Accuracy is 0.8260869565217391
+Misclassification rate is 0.17391304347826086
+Number of false positives is 8 out of 8 misclassified.
+=============END OF SUMMARY============

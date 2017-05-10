@@ -1,0 +1,124 @@
+/**
+* Trained with Bubble tea, Coffee, Yoghurt, Ice Cream, Taxi
+**
+
+==============GOT THIS WRONG=============
+Original Text: "Hey folks, you may have seen stories about the use of ammonia hydroxide in our burgers circulating online or via WhatsApp. Well, it’s entirely untrue. Here in Singapore, we’ve never used beef treated with ammonia hydroxide or “pink slime”. You can rest assured that our beef patties in all your favourite McDonald’s burgers are made from 100% beef from Australia and New Zealand!"
+Normalized Tokens: ["hei","folk","mai","seen","stori","us","ammonia","hydroxid","burger","circul","onlin","via","whatsapp","entir","untru","singapor","ve","us","beef","treat","ammonia","hydroxid","pink","slime","rest","assur","beef","patti","favourit","mcdonald","burger","made","100","beef","australia","new","zealand"]
+Was supposed to be not-promo, but instead got promo
+{"promo":9.053716580610515e-21,"not-promo":2.227437248667256e-22}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Hash brown lovers, dig into this - our all-new Golden Prosperity Beef Burger comes with a crispy hash brown, and goes great with Prosperity Twister Fries™! You’ll also receive a set of 6 limited edition red packets with every Golden Prosperity Extra Value Meal™ you buy, while stocks last, so be like the rooster and get in early! Offer valid till 8 Feb."
+Normalized Tokens: ["hash","brown","lover","dig","new","golden","prosper","beef","burger","come","crispi","hash","brown","goe","great","prosper","twister","fri","ll","receiv","set","limit","edit","red","packet","everi","golden","prosper","extra","valu","meal","bui","stock","last","rooster","earli","offer","valid","till","feb"]
+Was supposed to be not-promo, but instead got promo
+{"promo":2.738162465325677e-30,"not-promo":5.277533934648926e-32}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Kick-start your weekends with these Weekend Breakfast deals at great value! See more at: "
+Normalized Tokens: ["kick","start","weekend","weekend","breakfast","deal","great","valu"]
+Was supposed to be promo, but instead got not-promo
+{"promo":3.31412641378217e-11,"not-promo":6.65563733640142e-11}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Perk up your value meals with Starbuys treats! #BurgerkingSG"
+Normalized Tokens: ["perk","valu","meal","starbui","treat","burgerkingsg"]
+Was supposed to be not-promo, but instead got promo
+{"promo":0.0019093779834030986,"not-promo":0.0016088486676721966}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "$2 ice cream floats are here! From 18 Mar - 24 Mar, #BurgerKingSG is treating you to a Coke/Fanta Grape float for only $2. Here’s how: 1. Pause the video at the correct spot 2. Take a screenshot 3. Present your screenshot to any outlet 4. Get your delicious float for $2! Be sure to ‘LIKE’ our Facebook page and tag your friends to tell them about this awesome deal. While stocks last. Terms and conditions apply."
+Normalized Tokens: ["ic","cream","float","18","mar","24","mar","burgerkingsg","treat","coke","fanta","grape","float","paus","video","correct","spot","screenshot","present","screenshot","outlet","delici","float","sure","facebook","page","tag","friend","tell","awesom","deal","stock","last","term","condit","appli"]
+Was supposed to be promo, but instead got not-promo
+{"promo":5.698578945064383e-32,"not-promo":2.76660663918817e-30}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Indulge at a Burger King near you with StarBuys™ from $2! Click here for more: http://bit.ly/2m0FeQK"
+Normalized Tokens: ["indulg","burger","king","near","starbui","click","http","bit","ly","2m0feqk"]
+Was supposed to be promo, but instead got not-promo
+{"promo":1.6995155880961988e-8,"not-promo":7.908769053645768e-8}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "BK Woodlands Exchange outlet will be closed for renovation from 4 to 11 March to serve you better and will resume business on 12 March at 2pm. Head down to our other BK outlets at Fuchun Community Club and Sembawang Shopping Centre to get your BK fix or let us deliver to you at BKdelivers.com.sg."
+Normalized Tokens: ["bk","woodland","exchang","outlet","will","close","renov","11","march","serv","better","will","resum","busi","12","march","2pm","head","down","bk","outlet","fuchun","commun","club","sembawang","shop","centr","bk","fix","let","us","deliv","bkdeliv","com","sg"]
+Was supposed to be not-promo, but instead got promo
+{"promo":2.8635842882589565e-27,"not-promo":4.723201515004306e-29}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Satisfy your pizza craving with some heartily warm pizzas, lovingly made with our dough that's freshly prepared daily! To be blessed with a cheery mood and a feel-good weekend ahead, here’s what you need ? po.st/PizzaHutdelivers  ? by @where.is.karl on Instagram."
+Normalized Tokens: ["satisfi","pizza","crave","heartili","warm","pizza","lovingli","made","dough","freshli","prepar","daili","bless","cheeri","mood","feel","good","weekend","ahead","need","po","st","pizzahutdeliv","karl","instagram"]
+Was supposed to be not-promo, but instead got promo
+{"promo":6.905283121469585e-22,"not-promo":3.801492904392091e-22}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "UPDATE: We're back! ? Thank you for your kind understanding while we're out. We've sorted the technical issues - let's resume the pizza happiness at www.phdelivery.com.sg ?"
+Normalized Tokens: ["updat","re","back","thank","kind","understand","re","ve","sort","technic","issu","let","resum","pizza","happi","www","phdeliveri","com","sg"]
+Was supposed to be not-promo, but instead got promo
+{"promo":8.873977541149723e-15,"not-promo":3.9965050355129206e-15}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Bring your #CrustCrush home for that exciting meet-the-family date! Along with the Cheddary crusted pizza, our Big Variety Box's got a little something for everyone to enjoy as well. Perfect your home party and order your ?? today!"
+Normalized Tokens: ["bring","crustcrush","home","excit","meet","famili","date","along","cheddari","crust","pizza","big","varieti","box","littl","someth","everyon","enjoi","perfect","home","parti","order","todai"]
+Was supposed to be not-promo, but instead got promo
+{"promo":2.427171107162681e-27,"not-promo":6.84518572069383e-28}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Our 1-for-1 Weekdays Lunch menu gets BIGGER & BETTER! Enjoy a fast serving lunch experience with a wide variety of the all-time favourite Pizzas, Pastas and Entrées to choose from. Learn more here: https://goo.gl/l1jUIV"
+Normalized Tokens: ["weekdai","lunch","menu","get","bigger","better","enjoi","fast","serv","lunch","experi","wide","varieti","time","favourit","pizza","pasta","entr","es","choos","learn","http","goo","gl","l1juiv"]
+Was supposed to be promo, but instead got not-promo
+{"promo":1.108255315791419e-20,"not-promo":1.1913607227157352e-20}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Heard about our Domino's Tapau Deal? It’s our Personal Pizza Deal at only $5? With 29 Personal Pizzas varieties, we're on the lookout for the Top 5.  We’re curious to know your Top 5 favourite Domino’s Personal Pizza! Comment below. More details on the $5 Personal Deal and all varieties here: http://bit.ly/DominosPersonalPizza"
+Normalized Tokens: ["heard","domino","tapau","deal","person","pizza","deal","29","person","pizza","varieti","re","lookout","top","re","curiou","know","top","favourit","domino","person","pizza","comment","detail","person","deal","varieti","http","bit","ly","dominospersonalpizza"]
+Was supposed to be not-promo, but instead got promo
+{"promo":1.1764458024889778e-16,"not-promo":5.377669928925249e-18}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Like Eye Candy, Domino’s Triple Treat are not only Yummy, they’re great value too. Order any 2 Pizza deals and enjoy any 3 sides for just $14. Tag a friend that you want to share this Triple Treat with now. ;) Get it here today:http://bit.ly/DominosAllDayValue"
+Normalized Tokens: ["ey","candi","domino","tripl","treat","not","yummi","re","great","valu","order","pizza","deal","enjoi","side","just","14","tag","friend","want","share","tripl","treat","todai","http","bit","ly","dominosalldayvalu"]
+Was supposed to be promo, but instead got not-promo
+{"promo":3.4414963618467175e-25,"not-promo":8.669164438884892e-24}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Enjoy our 2 Pizza Deals from only $22 and get FREE Extra 100% Mozzarella Cheese on both of them. PLUS, you'll get FREE delivery too. Cheese is the way to go with Domino's. Tell us some of the cheesiest pick up lines you know. And click here to enjoy this cheesy, free delivery Domino's deal: http://bit.ly/DominosAllDayValue"
+Normalized Tokens: ["enjoi","pizza","deal","22","free","extra","100","mozzarella","chees","plu","ll","free","deliveri","chees","go","domino","tell","us","cheesiest","pick","line","know","click","enjoi","cheesi","free","deliveri","domino","deal","http","bit","ly","dominosalldayvalu"]
+Was supposed to be promo, but instead got not-promo
+{"promo":2.2607255064818024e-22,"not-promo":5.422670563112117e-22}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "It's Monday. So let's be productive and figure out this Brain Teaser: What looks like half a pizza?"
+Normalized Tokens: ["mondai","let","product","figur","brain","teaser","look","half","pizza"]
+Was supposed to be not-promo, but instead got promo
+{"promo":0.000001112550658951238,"not-promo":4.283916570724791e-7}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Why just have a slice of our pizza yourself when you can order our uniquely large 14 pan at just $17.90 to share! For a limited time only when you order through FoodPanda: https://Pezzo.foodpanda.sg. Promotions ends on 12 March 2017. Available from selected stores only from 10am-5pm, Monday to Saturday. Limited to Hola Hawaiian, Chessy Cheese, Hot Chick and Very Veggie only. Terms & Conditions apply."
+Normalized Tokens: ["just","slice","pizza","order","uniqu","larg","14","pan","just","17","90","share","limit","time","order","foodpanda","http","pezzo","foodpanda","sg","promot","end","12","march","2017","avail","select","store","10am","5pm","mondai","saturdai","limit","hola","hawaiian","chessi","chees","hot","chick","veggi","term","condit","appli"]
+Was supposed to be promo, but instead got not-promo
+{"promo":5.759899631858354e-35,"not-promo":1.2901569503757259e-34}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "HAPPY NATIONAL PIZZA DAY! Come by and enjoy a 1-for-1 Cheesy Cheese special from 9 Feb to 12 Feb from 1pm to 5pm at all Pezzo outlets. Terms & Conditions apply.  Not valid at Pezzo Takashimaya, Changi Airport Terminal 2 and Sentosa. See you soon!"
+Normalized Tokens: ["happi","nation","pizza","dai","enjoi","cheesi","chees","special","feb","12","feb","1pm","5pm","pezzo","outlet","term","condit","appli","not","valid","pezzo","takashimaya","changi","airport","termin","sentosa","soon"]
+Was supposed to be not-promo, but instead got promo
+{"promo":3.799276340136002e-20,"not-promo":1.1859284261102119e-25}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Couch and Netflix this weekend? Give the kitchen a break. Let us spoil you with FREE DELIVERY on your next pizza purchase from us with a minimum order of $25. Hurry! Offer ends 17 January 2017. ORDER NOW at https://pezzo.foodpanda.sg"
+Normalized Tokens: ["couch","netflix","weekend","give","kitchen","break","let","us","spoil","free","deliveri","next","pizza","purchas","us","minimum","order","25","hurri","offer","end","17","januari","2017","order","http","pezzo","foodpanda","sg"]
+Was supposed to be not-promo, but instead got promo
+{"promo":5.14326073997622e-22,"not-promo":5.8884640601999854e-24}
+=========================================
+==============GOT THIS WRONG=============
+Original Text: "Whoop Whoop! I won a FREE Upsize!  This is way too easy, I just bought some 4FINGERS, loaded the game up, entered my code and swapped some icons around... BOOM! Free food. Check it out here: Cluckthatgame.4fingers.com Terms and conditions apply."
+Normalized Tokens: ["whoop","whoop","won","free","upsiz","easi","just","bought","4finger","load","game","enter","code","swap","icon","around","boom","free","food","check","cluckthatgam","4finger","com","term","condit","appli"]
+Was supposed to be not-promo, but instead got promo
+{"promo":4.600409822608597e-19,"not-promo":3.464110409127298e-19}
+=========================================
+================SUMMARY================
+You got 44/63 correct
+Accuracy is 0.6984126984126984
+Misclassification rate is 0.30158730158730157
+Number of false positives is 12 out of 19 misclassified.
+=============END OF SUMMARY============
