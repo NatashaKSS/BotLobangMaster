@@ -45,13 +45,6 @@ module.exports = class BotHub {
       [BRANDS.brands.Taxi.uber, BRANDS.brands.Taxi.grab, BRANDS.brands.Taxi.comfort],
       constants.FB_QUERY_PARAMS_URL,
       (posts) => {
-        // console.log("========================================");
-        // console.log("GET LIST OF POSTS FROM ALL BRANDS:");
-        // console.log(posts['UberSingapore'][0]);
-        // console.log(posts['Grab'][0]);
-        // console.log(posts['ComfortDelGroTaxi'][0]);
-        // console.log("========================================");
-
         let listOfPromos = posts['UberSingapore'].concat(posts['Grab']).concat(posts['ComfortDelGroTaxi']);
         this._PromoMachine.generatePromos(listOfPromos);
       }
