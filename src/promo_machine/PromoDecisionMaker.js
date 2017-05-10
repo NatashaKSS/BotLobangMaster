@@ -128,7 +128,6 @@ module.exports = class PromoDecisionMaker {
    */
   composeFBPostPromos(FBposts) {
     let composedDataObjs = [];
-    console.log(FBposts[0]);
 
     for (let i = 0; i < FBposts.length; i++) {
       let FBpost = FBposts[i].message;
@@ -238,11 +237,11 @@ module.exports = class PromoDecisionMaker {
     let tokenizedTaxiFixtures = this.getTokenizedTrainDataFromCategory(Fixtures_TAXI);
 
     let trainData = _.flatten([tokenizedBubbleTea, tokenizedYoghurt, tokenizedCoffee,
-                               tokenizedIceCream, tokenizedFastFood], true);
+                               tokenizedIceCream, tokenizedFastFood, tokenizedTaxi], true);
 
     let trainTestObj = {
       train: trainData,
-      test: tokenizedTaxi
+      test: tokenizedTaxi // TODO: Check if you're training on this list too to avoid overfitting during testing
     }
 
     return trainTestObj;
