@@ -25,7 +25,7 @@ module.exports = class PromoMachine {
   generatePromos(posts) {
     let listOfPromoObjs = this._promoDecisionMaker.getPromosOnly(false, posts);
     let promos = this.decipherPromoObjs(listOfPromoObjs);
-    console.log(promos)
+    //console.log(promos)
     this._promoAirTableHandler.sendToAirTable("Taxi_FB", promos);
   }
 
