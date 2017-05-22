@@ -15,24 +15,22 @@ const REDEMPTIONS = require('./../references/lookup/keywords/title/redemptions.j
  * Extracts title information from a promo's text field and
  * Puts it in a format fit for for pushing to the chatbot
  */
-module.exports = class TitleConstructor {
+module.exports = class FieldsExtractor {
   constructor() {
     this._TextManipulator = new TextManipulator();
   }
 
   /**
-   * Best-effort extracts elements of a piece of text that most fits the
-   * 'title' category and returns an Object representing the promo with
-   * extracted fields
+   * Best-effort extracts elements of a piece of text and returns an
+   * Object representing the promo with extracted fields
    *
    * @param {Object} promoObj Promo obj
    * @return {Object} Fields of this promo
    */
-  getTitle(promoObj) {
+  getExtracted(promoObj) {
     let promoText = promoObj.originalMsg;
-    let brand = promoObj.brand;
 
-    let titleFields = {
+    let extractedFields = {
       user_type: "",
       brand: "",
       product: "",
@@ -44,17 +42,17 @@ module.exports = class TitleConstructor {
       redemptions: "",
     }
 
-    titleFields['user_type'] = this.getUserAction(promoText);
-    titleFields['brand'] = brand;
-    titleFields['product'] = this.getProduct(promoText);
-    titleFields['date'] = this.getDate(promoText);
-    titleFields['amount_$'] = this.getPrice(promoText);
-    titleFields['amount_%'] = this.getPercentage(promoText);
-    titleFields['ride_type'] = this.getRideType(promoText);
-    titleFields['promo_code'] = this.getPromoCodes(promoText);
-    titleFields['redemptions'] = this.getRedemptions(promoText);
+    extractedFields['user_type'] = this.getUserAction(promoText);
+    extractedFields['brand'] = promoObj.brand;
+    extractedFields['product'] = this.getProduct(promoText);
+    extractedFields['date'] = this.getDate(promoText);
+    extractedFields['amount_$'] = this.getPrice(promoText);
+    extractedFields['amount_%'] = this.getPercentage(promoText);
+    extractedFields['ride_type'] = this.getRideType(promoText);
+    extractedFields['promo_code'] = this.getPromoCodes(promoText);
+    extractedFields['redemptions'] = this.getRedemptions(promoText);
 
-    return titleFields;
+    return extractedFields;
   }
 
   //==============================================================
