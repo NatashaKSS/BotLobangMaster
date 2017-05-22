@@ -1,6 +1,7 @@
 // Import external libraries
 const _ = require('underscore');
 const PromoDecisionMaker = require('./PromoDecisionMaker.js');
+const PromoDecisionMakerPrepper = require('./PromoDecisionMakerPrepper.js');
 const TitleConstructor = require('./TitleConstructor.js');
 const PromoSentenceConstructor = require('./PromoSentenceConstructor.js');
 const PromoAirTableHandler = require('./../promo_machine/PromoAirTableHandler.js');
@@ -11,6 +12,7 @@ const PromoAirTableHandler = require('./../promo_machine/PromoAirTableHandler.js
 module.exports = class PromoMachine {
   constructor() {
     this._promoDecisionMaker = new PromoDecisionMaker();
+    this._promoDecisionMakerPrepper = new PromoDecisionMakerPrepper();
     this._titleConstructor = new TitleConstructor();
     this._promoSentenceConstructor = new PromoSentenceConstructor();
     this._promoAirTableHandler = new PromoAirTableHandler();
@@ -23,10 +25,11 @@ module.exports = class PromoMachine {
    * @return {[Array]} Promos fit for FB chatbot
    */
   generatePromos(posts) {
-    let listOfPromoObjs = this._promoDecisionMaker.getPromosOnly(false, posts);
-    let promos = this.decipherPromoObjs(listOfPromoObjs);
-    //console.log(promos)
-    this._promoAirTableHandler.sendToAirTable("Taxi_FB", promos);
+    let listOfFBPosts = this._promoDecisionMakerPrepper.flattenListOfFBPosts(posts);
+    let listOfPromoObjs = this._promoDecisionMaker.getPromosOnly(false, listOfFBPosts);
+    console.log(listOfPromoObjs)
+    // let promos = this.decipherPromoObjs(listOfPromoObjs);
+    // this._promoAirTableHandler.sendToAirTable("Taxi_FB", promos);
   }
 
   //==============================================================

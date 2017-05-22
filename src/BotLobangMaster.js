@@ -45,8 +45,8 @@ module.exports = class BotHub {
       [BRANDS.brands.Taxi.uber, BRANDS.brands.Taxi.grab, BRANDS.brands.Taxi.comfort],
       constants.FB_QUERY_PARAMS_URL
     ).then((posts) => {
-      console.log("posts", posts); // [0th entry is Uber, 1st is Grab, 2nd is CDG]
-      // this._PromoMachine.generatePromos(listOfPromos);
+      // console.log("posts", posts); // [0th entry is Uber, 1st is Grab, 2nd is CDG]
+      this._PromoMachine.generatePromos(posts);
     }).catch((error) => {
       console.error(error);
     });
