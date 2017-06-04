@@ -43,12 +43,13 @@ module.exports = class BotHub {
     this._FBPostsRetriever.getListOfNodes(
       constants.FB_QUERY_OPTIONS,
       [BRANDS.brands.Taxi.uber, BRANDS.brands.Taxi.grab, BRANDS.brands.Taxi.comfort],
-      constants.FB_QUERY_PARAMS_URL,
-      (posts) => {
-        let listOfPromos = posts['UberSingapore'].concat(posts['Grab']).concat(posts['ComfortDelGroTaxi']);
-        this._PromoMachine.generatePromos(listOfPromos);
-      }
-    );
+      constants.FB_QUERY_PARAMS_URL
+    ).then((posts) => {
+      // console.log("posts", posts); // [0th entry is Uber, 1st is Grab, 2nd is CDG]
+      this._PromoMachine.generatePromos(posts);
+    }).catch((error) => {
+      console.error(error);
+    });
 
     // ======================================
     // SPIN UP THE SERVER
