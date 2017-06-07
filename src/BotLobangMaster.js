@@ -14,7 +14,7 @@ const BRANDS = require('./references/lookup/brands.js');
 const constants = require('./lib/constants.js');
 
 /**
- *
+ * Main Entry Point of BotLobangMaster
  */
 module.exports = class BotHub {
   constructor () {
@@ -43,12 +43,12 @@ module.exports = class BotHub {
     this._FBPostsRetriever.getListOfNodes(
       constants.FB_QUERY_OPTIONS,
       [BRANDS.brands.Taxi.uber, BRANDS.brands.Taxi.grab, BRANDS.brands.Taxi.comfort],
-      constants.FB_QUERY_PARAMS_URL,
-      (posts) => {
-        let listOfPromos = posts['UberSingapore'].concat(posts['Grab']).concat(posts['ComfortDelGroTaxi']);
-        this._PromoMachine.generatePromos(listOfPromos);
-      }
-    );
+      constants.FB_QUERY_PARAMS_URL
+    ).then((posts) => {
+      this._PromoMachine.generatePromos(posts);
+    }).catch((error) => {
+      console.error(error);
+    });
 
     // ======================================
     // SPIN UP THE SERVER
