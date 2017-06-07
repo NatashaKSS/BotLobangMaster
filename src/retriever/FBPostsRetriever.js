@@ -7,7 +7,7 @@ const FBGraph = require('fbgraph');
 module.exports = class FBPostsRetriever {
   constructor() {
     this._FBGraph = require('fbgraph');
-    this._FBGraph.setAccessToken(process.env.FB_ACCESS_TOKEN_BOT_TEST_A1);
+    this._FBGraph.setAccessToken(process.env.FB_ACCESS_TOKEN);
   }
 
   /**
