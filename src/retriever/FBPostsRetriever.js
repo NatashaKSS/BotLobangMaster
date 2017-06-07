@@ -38,8 +38,6 @@ module.exports = class FBPostsRetriever {
       this._FBGraph.setOptions(options).get(queryURL + queryParams, (err, res) => {
         try {
           let result = res.data;
-          // console.log("POSTS from " + queryURL + " retrieved!!");
-
           switch(queryURL) {
             case "UberSingapore":
               result = this.setBrandForEveryPost(result, "Uber");
@@ -54,7 +52,7 @@ module.exports = class FBPostsRetriever {
               result = this.setBrandForEveryPost(result, "NO_BRAND");
               break;
           }
-          resolve(result.slice(0, 3));
+          resolve(result.slice(0, 5));
         } catch (error) {
           console.error(error);
           reject(error);
