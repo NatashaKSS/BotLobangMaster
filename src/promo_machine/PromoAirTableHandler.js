@@ -19,6 +19,8 @@ module.exports = class PromoAirTableHandler {
       this.getUniquePromos(uniquePromos, "Taxi_FB_ignores", (uniquePromos) => {
         allAirTablePromos = uniquePromos;
 
+        console.log(allAirTablePromos);
+
         // allAirTablePromos should not contain duplicates at this point
         for(var i = 0; i < allAirTablePromos.length; i++) {
           let promo = allAirTablePromos[i].promoObj;

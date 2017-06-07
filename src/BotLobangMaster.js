@@ -14,7 +14,7 @@ const BRANDS = require('./references/lookup/brands.js');
 const constants = require('./lib/constants.js');
 
 /**
- *
+ * Main Entry Point of BotLobangMaster
  */
 module.exports = class BotHub {
   constructor () {
@@ -45,7 +45,6 @@ module.exports = class BotHub {
       [BRANDS.brands.Taxi.uber, BRANDS.brands.Taxi.grab, BRANDS.brands.Taxi.comfort],
       constants.FB_QUERY_PARAMS_URL
     ).then((posts) => {
-      // console.log("posts", posts); // [0th entry is Uber, 1st is Grab, 2nd is CDG]
       this._PromoMachine.generatePromos(posts);
     }).catch((error) => {
       console.error(error);
