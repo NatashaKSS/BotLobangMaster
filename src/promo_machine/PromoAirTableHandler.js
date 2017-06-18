@@ -17,25 +17,23 @@ module.exports = class PromoAirTableHandler {
 
     this.getUniquePromos(promos, table, (uniquePromos) => {
       this.getUniquePromos(uniquePromos, "Taxi_FB_ignores", (uniquePromos) => {
-        allAirTablePromos = uniquePromos;
-
-        console.log(allAirTablePromos);
-
         // allAirTablePromos should not contain duplicates at this point
-        for(var i = 0; i < allAirTablePromos.length; i++) {
-          let promo = allAirTablePromos[i].promoObj;
-          let title = allAirTablePromos[i].title;
-          let description = allAirTablePromos[i].description;
+        for(var i = 0; i < uniquePromos.length; i++) {
+          let promoPost = uniquePromos[i];
+          let promo = promoPost.promoObj;
+
+          // Log promos sent to AirTable
+          console.log(promoPost);
 
           this._base(table).create({
-            promo_code_ID: promo.promo_code[0],
-            promo_codes: JSON.stringify(promo.promo_code),
-            title: title,
-            description: description,
-            image: promos[i].image_url,
-            link_to: promos[i].link_to,
-            brand: promos[i].brand,
-            product: JSON.stringify(promo.product),
+            promo_code_ID: promo["promo_code"][0],
+            promo_codes: JSON.stringify(promo["promo_code"]),
+            title: promoPost["title"],
+            description: promoPost["description"],
+            image: promoPost["image_url"],
+            link_to: promoPost["link_to"],
+            brand: promo["brand"],
+            product: JSON.stringify(promo["product"]),
             amount_$: JSON.stringify(promo["amount_$"]),
             "amount_%": JSON.stringify(promo["amount_%"]),
             ride_type: JSON.stringify(promo["ride_type"]),
@@ -46,6 +44,7 @@ module.exports = class PromoAirTableHandler {
           }, (err, record) => {
             if (!err) {
               // No errors
+              console.log("Created record", record);
             } else {
               // Return debug message with first 30 chars of post title
               console.log("ERROR IN", record);
